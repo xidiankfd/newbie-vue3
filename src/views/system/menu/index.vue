@@ -2,7 +2,6 @@
 import { onMounted, reactive, ref } from 'vue'
 import { Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import useCutTree from 'cut-tree'
-import { ElMessage } from 'element-plus'
 import MenuForm from './MenuForm.vue'
 import { deleteMenuBatchApi, getMenuTreeApi } from '@/api/system/menu'
 import SvgIcon from '@/components/svg-icon/index.vue'
@@ -12,7 +11,7 @@ import { useAppStore } from '@/stores/modules/app'
 const tableRef = ref()
 const appStore = useAppStore()
 const queryFormRef = ref()
-const { forEach } = useCutTree({ id: 'menuId' })
+const { forEach } = useCutTree({ id: 'id' })
 const state = reactive({
   commonStatusList: [],
   currentRow: {},
@@ -43,7 +42,7 @@ const methods = {
   },
   recursionGetMenuIds(menus, menuIds) {
     menus.forEach((menu) => {
-      menuIds.push(menu.menuId)
+      menuIds.push(menu.id)
       if (menu.children && menu.children.length)
         methods.recursionGetMenuIds(menu.children, menuIds)
     })
@@ -51,11 +50,11 @@ const methods = {
   del(row) {
     const menuIds = []
     if (row.children && row.children.length) {
-      menuIds.push(row.menuId)
+      menuIds.push(row.id)
       methods.recursionGetMenuIds(row.children, menuIds)
     }
     else {
-      menuIds.push(row.menuId)
+      menuIds.push(row.id)
     }
     methods.delBatch(menuIds)
   },
@@ -75,9 +74,6 @@ const methods = {
     const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
     if (ok)
       state.commonStatusList = data
-
-    else
-      ElMessage.error('获取通用状态字典数据失败')
   },
 }
 onMounted(() => {
@@ -126,7 +122,7 @@ onMounted(() => {
           </div>
         </div>
         <el-table
-          ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="menuId"
+          ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="id"
           height="calc(100vh - 300px)" default-expand-all
         >
           <el-table-column prop="title" label="标题" width="180" fixed="left" align="left" header-align="center" />
@@ -137,7 +133,7 @@ onMounted(() => {
               </el-icon>
             </template>
           </el-table-column>
-          <el-table-column prop="orderNo" label="排序" width="70" align="right" header-align="center" />
+          <el-table-column prop="sort" label="排序" width="70" align="right" header-align="center" />
           <el-table-column label="类型" width="90" align="center">
             <template #default="{ row }">
               <el-tag :type="row.type === '0' ? 'success' : 'primary'">
@@ -161,7 +157,7 @@ onMounted(() => {
             <template #default="{ row }">
               <el-button
                 v-hasPerm="'sys:menu:add'" :disabled="row.type === '0'" type="primary" link
-                @click="methods.openMenuForm({ parentId: row.menuId })"
+                @click="methods.openMenuForm({ parentId: row.id })"
               >
                 新增
               </el-button>

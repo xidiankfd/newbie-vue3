@@ -13,7 +13,7 @@ const props = defineProps({
 const emit = defineEmits(['onSaveSuccess', 'update:modelValue'])
 const menuTreeProp = {
   label: 'title',
-  value: 'menuId',
+  value: 'id',
 }
 const menuFormRef = ref()
 const butFormRef = ref()
@@ -30,12 +30,12 @@ const state = reactive({
   // 菜单form
   form: {
     isIframe: false, // 内嵌外链
-    menuId: null,
+    id: null,
     parentId: props.row.parentId || 0,
     title: '',
     type: '1',
     icon: '',
-    orderNo: 0,
+    sort: 1,
     routePath: '',
     routeName: '',
     component: '',
@@ -45,20 +45,20 @@ const state = reactive({
     isOuter: '0',
     fixedTab: '0',
     status: '1',
-    description: '',
+    remark: '',
     iframeLink: '',
     perm: '',
     transition: '',
   },
   // 按钮form
   formBut: {
-    menuId: null,
+    id: null,
     parentId: props.row.parentId || 0,
     title: '',
     type: '0',
-    orderNo: 0,
+    sort: 1,
     perm: '',
-    description: '',
+    remark: '',
     status: '1',
   },
 })
@@ -122,7 +122,7 @@ const methods = {
     state.menus = [
       {
         title: '顶级',
-        menuId: 0,
+        id: 0,
         children: [],
       },
       ...data,
@@ -150,17 +150,17 @@ const methods = {
   },
   orderNoBlur(flag) {
     if (flag === 'but') {
-      if (!state.formBut.orderNo)
-        state.formBut.orderNo = 0
+      if (!state.formBut.sort && state.formBut.sort !== 0)
+        state.formBut.sort = 1
     }
     else {
-      if (!state.form.orderNo)
-        state.form.orderNo = 0
+      if (!state.form.sort && state.form.sort !== 0)
+        state.form.sort = 1
     }
   },
 }
 const drawerTitle = computed(() => {
-  if (props.row.menuId || props.row.menuId === 0)
+  if (props.row.id || props.row.id === 0)
     return props.row.type === '0' ? '修改按钮' : '修改菜单'
 
   else
@@ -168,7 +168,7 @@ const drawerTitle = computed(() => {
 })
 
 nextTick(() => {
-  if (props.row.menuId || props.row.menuId === 0) {
+  if (props.row.id || props.row.id === 0) {
     state.type = props.row.type
     if (props.row.type === '1') {
       state.form = { ...props.row }
@@ -200,7 +200,7 @@ nextTick(() => {
               <el-form-item label="上级菜单" prop="parentId">
                 <el-tree-select
                   v-model="state.form.parentId" filterable :data="state.menus" :props="menuTreeProp"
-                  node-key="menuId" check-strictly
+                  node-key="id" check-strictly
                 />
               </el-form-item>
             </el-col>
@@ -274,8 +274,8 @@ nextTick(() => {
               </el-form-item>
             </el-col>
             <el-col :span="24" :offset="0">
-              <el-form-item label="排序" prop="orderNo">
-                <el-input-number v-model="state.form.orderNo" controls-position="right" @blur="methods.orderNoBlur" />
+              <el-form-item label="排序" prop="sort">
+                <el-input-number v-model="state.form.sort" controls-position="right" @blur="methods.orderNoBlur" />
               </el-form-item>
             </el-col>
             <el-col :span="8" :offset="0">
@@ -348,8 +348,8 @@ nextTick(() => {
             </el-col>
 
             <el-col :span="24" :offset="0">
-              <el-form-item label="描述" prop="description">
-                <el-input v-model="state.form.description" type="textarea" placeholder="描述" :maxlength="120" show-word-limit :rows="4" />
+              <el-form-item label="描述" prop="remark">
+                <el-input v-model="state.form.remark" type="textarea" placeholder="描述" :maxlength="120" show-word-limit :rows="4" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -359,7 +359,7 @@ nextTick(() => {
         <el-form ref="butFormRef" :model="state.formBut" :rules="rules" label-width="120px">
           <el-form-item label="上级菜单" prop="parentId">
             <el-tree-select
-              v-model="state.formBut.parentId" :data="state.menus" :props="menuTreeProp" node-key="menuId"
+              v-model="state.formBut.parentId" :data="state.menus" :props="menuTreeProp" node-key="id"
               check-strictly
             />
           </el-form-item>
@@ -372,9 +372,9 @@ nextTick(() => {
             <el-input v-model="state.formBut.perm" placeholder="权限字符" />
           </el-form-item>
 
-          <el-form-item label="排序" prop="orderNo">
+          <el-form-item label="排序" prop="sort">
             <el-input-number
-              v-model="state.formBut.orderNo" controls-position="right"
+              v-model="state.formBut.sort" controls-position="right"
               @blur="methods.orderNoBlur('but')"
             />
           </el-form-item>
@@ -386,8 +386,8 @@ nextTick(() => {
             />
           </el-form-item>
 
-          <el-form-item label="描述" prop="description">
-            <el-input v-model="state.formBut.description" type="textarea" placeholder="描述" :maxlength="120" show-word-limit :rows="4" />
+          <el-form-item label="描述" prop="remark">
+            <el-input v-model="state.formBut.remark" type="textarea" placeholder="描述" :maxlength="120" show-word-limit :rows="4" />
           </el-form-item>
         </el-form>
       </el-tab-pane>

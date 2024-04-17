@@ -17,8 +17,8 @@ export function getMenuTreeApi(params) {
  * @returns {Promise}
  */
 export function saveMenuApi(data, successInfo = true) {
-  if (data.menuId || data.menuId === 0)
-    return axios.put(`${BASE_URL}/update`, data, { successMsgType: successInfo ? msgType.msg : msgType.none })
+  if (data.id || data.id === 0)
+    return axios.post(`${BASE_URL}/update`, data, { successMsgType: successInfo ? msgType.msg : msgType.none })
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: successInfo ? msgType.msg : msgType.none })
 }
@@ -30,8 +30,5 @@ export function saveMenuApi(data, successInfo = true) {
  * @returns {Promise}
  */
 export function deleteMenuBatchApi(menuIds, successInfo = true) {
-  const params = {
-    ids: menuIds.join(),
-  }
-  return axios.delete(`${BASE_URL}/delete`, { params, successMsgType: successInfo ? msgType.msg : msgType.none })
+  return axios.post(`${BASE_URL}/delete`, menuIds, { successMsgType: successInfo ? msgType.msg : msgType.none })
 }
