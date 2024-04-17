@@ -139,7 +139,7 @@ onMounted(() => {
           </el-table-column>
           <el-table-column prop="typeName" label="字典分类名称" fixed="left" align="left" header-align="center" min-width="180px" />
           <el-table-column prop="typeCode" label="字典分类编码" fixed="left" align="left" header-align="center" min-width="180px" />
-          <el-table-column prop="orderNo" label="排序" align="right" header-align="center" width="80px" />
+          <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
           <el-table-column label="状态" align="center" header-align="center" width="100px">
             <template #default="{ row }">
               <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
@@ -154,7 +154,7 @@ onMounted(() => {
               <el-button type="warning" link @click="methods.openEditForm(row)">
                 编辑
               </el-button>
-              <el-popconfirm :title="`确认要删除【${row.typeName}】吗？`" @confirm="methods.batchDel(row.id)">
+              <el-popconfirm :hide-after="0" :title="`确认要删除【${row.typeName}】吗？`" @confirm="methods.batchDel(row.id)">
                 <template #reference>
                   <el-button type="danger" link>
                     删除

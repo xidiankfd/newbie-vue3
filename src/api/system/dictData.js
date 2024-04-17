@@ -31,8 +31,8 @@ export function saveDictDataApi(data) {
  * @param {*} id 字典数据ID
  * @returns {Promise}
  */
-export function deleteApi(ids) {
-  return axios.post(`${BASE_URL}/delete`, ids, { successMsgType: msgType.msg })
+export function deleteBatchApi(ids) {
+  return axios.post(`${BASE_URL}/deleteBatch`, ids, { successMsgType: msgType.msg })
 }
 
 /**

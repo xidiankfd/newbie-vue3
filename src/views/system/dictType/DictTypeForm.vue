@@ -17,7 +17,7 @@ const state = reactive({
     id: props.row.id || null,
     typeName: props.row.typeName || '',
     typeCode: props.row.typeCode || '',
-    orderNo: props.row.orderNo || 1,
+    sort: props.row.sort || 1,
     status: props.row.status || '1',
     remark: props.row.remark || '',
   },
@@ -53,11 +53,6 @@ const methods = {
     })
   },
 
-  // 排序焦点离开事件
-  onOrderNoBlur() {
-    if (!state.form.orderNo)
-      state.form.orderNo = 1
-  },
   // 重置表单
   resetForm(formEl) {
     if (!formEl)
@@ -94,11 +89,11 @@ onMounted(() => {
       <el-form-item label="备注" prop="remark">
         <el-input v-model="state.form.remark" type="textarea" placeholder="备注" :maxlength="120" show-word-limit :rows="4" />
       </el-form-item>
-      <el-form-item label="排序" prop="orderNo">
+      <el-form-item label="排序" prop="sort">
         <el-input-number
-          v-model="state.form.orderNo"
+          v-model="state.form.sort"
           controls-position="right"
-          @blur="methods.onOrderNoBlur"
+          :value-on-clear="1"
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">

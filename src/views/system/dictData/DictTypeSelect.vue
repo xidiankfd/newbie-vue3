@@ -53,7 +53,10 @@ onMounted(() => {
 <template>
   <el-card :shadow="appStore.appConfig.elChardShadow">
     <template #header>
-      <el-input v-model="state.keyword" placeholder="类型名称" clearable style="width:120px" />
+      <el-input
+        v-model="state.keyword" placeholder="类型名称" clearable style="width:120px"
+        @keyup.enter="methods.queryData"
+      />
       <el-button :loading="state.queryLoading" type="primary" plain size="default" :icon="Search" class="ml-5" @click="methods.queryData" />
       <el-button type="primary" size="default" link @click="methods.onDictTypeManageClick">
         管理

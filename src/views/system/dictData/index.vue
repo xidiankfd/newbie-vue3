@@ -5,7 +5,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import DictDataForm from './DictDataForm.vue'
 import DictTypeSelect from './DictTypeSelect.vue'
 import {
-  deleteApi,
+  deleteBatchApi,
   getDictDataListByTypeCodeApi,
   getDictDataPagingApi,
   updateDictDataAsDefaultApi,
@@ -54,7 +54,7 @@ const methods = {
   },
   async batchDel(id) {
     if (id || id === 0) {
-      const { ok } = await deleteApi([id])
+      const { ok } = await deleteBatchApi([id])
       ok && methods.queryData()
     }
     else {
@@ -67,7 +67,7 @@ const methods = {
           type: 'warning',
         })
         .then(async () => {
-          const { ok } = await deleteApi(ids)
+          const { ok } = await deleteBatchApi(ids)
           ok && methods.queryData()
         })
     }
@@ -177,7 +177,7 @@ onMounted(() => {
                 prop="value" label="值" fixed="left" align="left" header-align="center"
                 min-width="80px"
               />
-              <el-table-column prop="orderNo" label="排序" align="right" header-align="center" width="60px" />
+              <el-table-column prop="sort" label="排序" align="right" header-align="center" width="60px" />
 
               <el-table-column label="元素类型" align="center" header-align="center" width="100px">
                 <template #default="{ row }">
@@ -207,7 +207,10 @@ onMounted(() => {
                   <el-button type="warning" link @click="methods.openEditForm(row)">
                     编辑
                   </el-button>
-                  <el-popconfirm :title="`确认要删除【${row.label}】吗？`" @confirm="methods.batchDel(row.id)">
+                  <el-popconfirm
+                    :hide-after="0"
+                    :title="`确认要删除【${row.label}】吗？`" @confirm="methods.batchDel(row.id)"
+                  >
                     <template #reference>
                       <el-button type="danger" link>
                         删除
