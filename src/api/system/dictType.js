@@ -27,10 +27,10 @@ export function saveDictTypeApi(data) {
 }
 
 /**
- * 删除字典类型
- * @param {*} id 字典分类ID
+ * 批量删除字典类型
+ * @param {*} ids 字典分类ID列表
  * @returns {Promise}
  */
-export function deleteDictTypeApi(id) {
-  return axios.post(`${BASE_URL}/delete`, { params: { id }, successMsgType: msgType.msg })
+export function deleteBatchApi(ids) {
+  return axios.post(`${BASE_URL}/deleteBatch`, ids, { successMsgType: msgType.msg })
 }

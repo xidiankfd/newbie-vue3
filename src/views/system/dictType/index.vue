@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
-import { Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import DictTypeForm from './DictTypeForm.vue'
-import { deleteDictTypeApi, getDictTypePagingApi } from '@/api/system/dictType'
+import { deleteBatchApi, getDictTypePagingApi } from '@/api/system/dictType'
 import usePagingParams from '@/hooks/usePagingParams.js'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
@@ -14,6 +14,7 @@ defineOptions({
 const appStore = useAppStore()
 const { current, size } = usePagingParams()
 const queryFormRef = ref()
+const tableRef = ref()
 const state = reactive({
   commonStatusList: [],
   currentRow: {},
@@ -44,9 +45,25 @@ const methods = {
     state.currentRow = row
     state.dialogShow = true
   },
-  async del(row) {
-    const { ok } = await deleteDictTypeApi(row.id)
-    ok && methods.queryData()
+  async batchDel(id) {
+    if (id || id === 0) {
+      const { ok } = await deleteBatchApi([id])
+      ok && methods.queryData()
+    }
+    else {
+      const ids = tableRef.value.getSelectionRows().map(item => item.id)
+      ElMessageBox.confirm('确认删除选中数据吗?',
+        '注意',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        .then(async () => {
+          const { ok } = await deleteBatchApi(ids)
+          ok && methods.queryData()
+        })
+    }
   },
   saveSuccess() {
     state.dialogShow = false
@@ -105,13 +122,21 @@ onMounted(() => {
             <el-button type="primary" :icon="Plus" @click="methods.openEditForm({})">
               新增
             </el-button>
+            <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
+              删除
+            </el-button>
           </div>
           <div>
             <el-button :icon="Refresh" circle @click="methods.queryData" />
           </div>
         </div>
-        <el-table v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 350px)">
-          <el-table-column fixed="left" type="index" align="right" header-align="center" width="60px" />
+        <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 350px)">
+          <el-table-column type="selection" width="55" />
+          <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px">
+            <template #default="{ $index }">
+              {{ (current - 1) * size + $index + 1 }}
+            </template>
+          </el-table-column>
           <el-table-column prop="typeName" label="字典分类名称" fixed="left" align="left" header-align="center" min-width="180px" />
           <el-table-column prop="typeCode" label="字典分类编码" fixed="left" align="left" header-align="center" min-width="180px" />
           <el-table-column prop="orderNo" label="排序" align="right" header-align="center" width="80px" />
@@ -129,7 +154,7 @@ onMounted(() => {
               <el-button type="warning" link @click="methods.openEditForm(row)">
                 编辑
               </el-button>
-              <el-popconfirm :title="`确认要删除【${row.typeName}】吗？`" @confirm="methods.del(row)">
+              <el-popconfirm :title="`确认要删除【${row.typeName}】吗？`" @confirm="methods.batchDel(row.id)">
                 <template #reference>
                   <el-button type="danger" link>
                     删除
