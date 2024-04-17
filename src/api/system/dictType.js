@@ -21,7 +21,7 @@ export function getDictTypePagingApi(current, size, params) {
  */
 export function saveDictTypeApi(data) {
   if (data.id || data.id === 0)
-    return axios.put(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
+    return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })
 }
@@ -32,5 +32,5 @@ export function saveDictTypeApi(data) {
  * @returns {Promise}
  */
 export function deleteDictTypeApi(id) {
-  return axios.delete(`${BASE_URL}/delete`, { params: { id }, successMsgType: msgType.msg })
+  return axios.post(`${BASE_URL}/delete`, { params: { id }, successMsgType: msgType.msg })
 }

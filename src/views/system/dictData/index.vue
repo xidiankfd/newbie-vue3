@@ -164,7 +164,11 @@ onMounted(() => {
               height="calc(100vh - 350px)"
             >
               <el-table-column type="selection" width="55" />
-              <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px" />
+              <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px">
+                <template #default="{ $index }">
+                  {{ (current - 1) * size + $index + 1 }}
+                </template>
+              </el-table-column>
               <el-table-column
                 prop="label" label="标签" fixed="left" align="left" header-align="center"
                 min-width="100px"
@@ -177,7 +181,7 @@ onMounted(() => {
 
               <el-table-column label="元素类型" align="center" header-align="center" width="100px">
                 <template #default="{ row }">
-                  <el-tag :type="state.eleTypeList.find(item => item.value === row.eleType)?.eleType">
+                  <el-tag v-if="row.eleType" :type="state.eleTypeList.find(item => item.value === row.eleType)?.eleType">
                     {{ state.eleTypeList.find(item => item.value === row.eleType)?.label }}
                   </el-tag>
                 </template>
@@ -191,7 +195,7 @@ onMounted(() => {
               </el-table-column>
               <el-table-column label="状态" align="center" header-align="center" width="80px">
                 <template #default="{ row }">
-                  <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
+                  <el-tag v-if="row.status" :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
                     {{ state.commonStatusList.find(item => item.value === row.status)?.label }}
                   </el-tag>
                 </template>
