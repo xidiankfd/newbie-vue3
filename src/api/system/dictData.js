@@ -21,7 +21,7 @@ export function getDictDataPagingApi(current, size, params) {
  */
 export function saveDictDataApi(data) {
   if (data.id || data.id === 0)
-    return axios.put(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
+    return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })
 }
@@ -31,8 +31,8 @@ export function saveDictDataApi(data) {
  * @param {*} id 字典数据ID
  * @returns {Promise}
  */
-export function deleteDictDataApi(id) {
-  return axios.delete(`${BASE_URL}/delete`, { params: { id }, successMsgType: msgType.msg })
+export function deleteApi(ids) {
+  return axios.post(`${BASE_URL}/delete`, ids, { successMsgType: msgType.msg })
 }
 
 /**
@@ -41,7 +41,7 @@ export function deleteDictDataApi(id) {
  * @returns {Promise}
  */
 export function updateDictDataAsDefaultApi(id) {
-  return axios.put(`${BASE_URL}/updateDictDataAsDefault/${id}`, null, { successMsgType: msgType.msg })
+  return axios.post(`${BASE_URL}/updateDictDataAsDefault/${id}`, null, { successMsgType: msgType.msg })
 }
 
 /**

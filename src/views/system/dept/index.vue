@@ -4,7 +4,7 @@ import { Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import useCutTree from 'cut-tree'
 import { ElMessage } from 'element-plus'
 import DeptForm from './DeptForm.vue'
-import { deleteDeptBatchApi, getDeptTreeApi } from '@/api/system/dept'
+import { deleteApi, getDeptTreeApi } from '@/api/system/dept'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
@@ -51,7 +51,7 @@ const methods = {
   // 递归获取所有子级数据id
   recursionGetdeptIds(depts, deptIds) {
     depts.forEach((dept) => {
-      deptIds.push(dept.deptId)
+      deptIds.push(dept.id)
       if (dept.children?.length)
         methods.recursionGetdeptIds(dept.children, deptIds)
     })
@@ -60,17 +60,17 @@ const methods = {
   onDelClick(row) {
     const deptIds = []
     if (row.children?.length) {
-      deptIds.push(row.deptId)
+      deptIds.push(row.id)
       methods.recursionGetdeptIds(row.children, deptIds)
     }
     else {
-      deptIds.push(row.deptId)
+      deptIds.push(row.id)
     }
     methods.delBatch(deptIds)
   },
   // 删除数据及子数据
   async delBatch(deptIds) {
-    const { ok } = await deleteDeptBatchApi(deptIds)
+    const { ok } = await deleteApi(deptIds)
     ok && methods.queryData()
   },
   openDeptForm(row) {
@@ -147,7 +147,7 @@ onMounted(() => {
           </div>
         </div>
         <el-table
-          ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="deptId"
+          ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="id"
           height="calc(100vh - 300px)"
         >
           <el-table-column
@@ -167,7 +167,7 @@ onMounted(() => {
             prop="email" label="邮箱" align="left" header-align="center" width="200px"
             show-overflow-tooltip
           />
-          <el-table-column prop="orderNo" label="排序" width="70" align="right" header-align="center" />
+          <el-table-column prop="sort" label="排序" width="70" align="right" header-align="center" />
           <el-table-column label="状态" width="90" align="center" header-align="center">
             <template #default="{ row }">
               <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
@@ -176,7 +176,7 @@ onMounted(() => {
             </template>
           </el-table-column>
           <el-table-column
-            prop="description" label="描述" width="180" align="left" header-align="center"
+            prop="remark" label="描述" width="180" align="left" header-align="center"
             show-overflow-tooltip
           />
           <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center" />
@@ -184,7 +184,7 @@ onMounted(() => {
             <template #default="{ row }">
               <el-button
                 v-hasPerm="'sys:menu:add'" :disabled="row.type === '0'" type="primary" link
-                @click="methods.openDeptForm({ parentId: row.deptId })"
+                @click="methods.openDeptForm({ parentId: row.id })"
               >
                 新增
               </el-button>

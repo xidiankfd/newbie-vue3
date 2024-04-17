@@ -10,7 +10,7 @@ const emit = defineEmits(['saveSuccess'])
 
 const deptTreeProp = {
   label: 'deptName',
-  value: 'deptId',
+  value: 'id',
 }
 
 const formRef = ref()
@@ -28,31 +28,33 @@ const state = reactive({
   submitLoading: false,
   deptTree: [],
   form: {
-    deptId: props.currentRow.deptId || null,
+    id: props.currentRow.id || null,
     parentId: props.currentRow.parentId || 0,
     deptName: props.currentRow.deptName || '',
     leader: props.currentRow.leader || '',
     phone: props.currentRow.phone || '',
     email: props.currentRow.email || '',
     status: props.currentRow.status || '1',
-    description: props.currentRow.description || '',
-    orderNo: props.currentRow.orderNo || 1,
+    remark: props.currentRow.remark || '',
+    sort: props.currentRow.sort || 1,
   },
 })
 /** 定义方法 */
 const methods = {
   isUpdate() {
-    return !!(props.currentRow.deptId === 0 || props.currentRow.deptId)
+    return !!(props.currentRow.id === 0 || props.currentRow.id)
   },
   // 初始化部门树
   async initDeptTree() {
     const { data } = await getDeptTreeApi()
 
-    state.deptTree = data
-    state.deptTree.unshift({
-      deptName: '顶级',
-      deptId: 0,
-    })
+    state.deptTree = [
+      {
+        deptName: '顶级',
+        id: 0,
+      },
+      ...data,
+    ]
   },
 
   // 重置
@@ -99,7 +101,7 @@ onMounted(() => {
               v-model="state.form.parentId"
               :disabled="methods.isUpdate()"
               class="w-full" filterable :data="state.deptTree" :props="deptTreeProp"
-              node-key="deptId" check-strictly
+              node-key="id" check-strictly
             />
           </el-form-item>
         </el-col>
@@ -124,8 +126,8 @@ onMounted(() => {
           </el-form-item>
         </el-col>
         <el-col :span="12" :offset="0">
-          <el-form-item label="排序" prop="orderNo">
-            <el-input-number v-model="state.form.orderNo" style="width: 100%;" :value-on-clear="1" />
+          <el-form-item label="排序" prop="sort">
+            <el-input-number v-model="state.form.sort" style="width: 100%;" :value-on-clear="1" />
           </el-form-item>
         </el-col>
         <el-col :span="12" :offset="0">
@@ -134,8 +136,8 @@ onMounted(() => {
           </el-form-item>
         </el-col>
         <el-col :span="24" :offset="0">
-          <el-form-item label="描述" prop="description">
-            <el-input v-model="state.form.description" placeholder="请输入" type="textarea" :maxlength="120" show-word-limit :rows="4" />
+          <el-form-item label="描述" prop="remark">
+            <el-input v-model="state.form.remark" placeholder="请输入" type="textarea" :maxlength="120" show-word-limit :rows="4" />
           </el-form-item>
         </el-col>
       </el-row>

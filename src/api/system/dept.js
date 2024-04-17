@@ -17,20 +17,17 @@ export function getDeptTreeApi(params) {
  * @returns {Promise}
  */
 export function saveDeptApi(data) {
-  if (data.deptId === 0 || data.deptId)
-    return axios.put(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
+  if (data.id === 0 || data.id)
+    return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })
 }
 
 /**
- * 批量删除部门
+ * 删除部门
  * @param {*} deptIds 部门ID列表
  * @returns {Promise}
  */
-export function deleteDeptBatchApi(deptIds) {
-  const params = {
-    ids: deptIds.join(),
-  }
-  return axios.delete(`${BASE_URL}/delete`, { params, successMsgType: msgType.msg })
+export function deleteApi(deptIds) {
+  return axios.post(`${BASE_URL}/delete`, deptIds, { successMsgType: msgType.msg })
 }
