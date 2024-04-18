@@ -167,7 +167,7 @@ onMounted(() => {
               <el-button v-hasPerm="'sys:menu:edit'" type="warning" link @click="methods.openMenuForm(row)">
                 编辑
               </el-button>
-              <el-popconfirm :title="`确认要删除【${row.title}】吗？`" @confirm="methods.delBatch(row.id)">
+              <el-popconfirm :hide-after="0" :title="`确认要删除【${row.title}】吗？`" @confirm="methods.delBatch(row.id)">
                 <template #reference>
                   <el-button v-hasPerm="'sys:menu:del'" type="danger" link>
                     删除

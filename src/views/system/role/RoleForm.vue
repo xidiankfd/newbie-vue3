@@ -13,14 +13,14 @@ const state = reactive({
   form: {
     roleName: '',
     roleCode: '',
-    orderNo: 1,
+    sort: 1,
     status: '1',
-    description: '',
+    remark: '',
   },
 })
 /** 抽屉标题 */
 const title = computed(() => {
-  if (props.row.roleId || props.row.roleId === 0)
+  if (props.row.id || props.row.id === 0)
     return '修改角色'
   else
     return '新增角色'
@@ -39,11 +39,6 @@ const methods = {
     })
   },
 
-  // 排序焦点离开事件
-  onOrderNoBlur() {
-    if (!state.form.orderNo)
-      state.form.orderNo = 0
-  },
   // 重置表单
   resetForm(formEl) {
     if (!formEl)
@@ -60,7 +55,7 @@ const rules = {
   ],
 }
 onMounted(() => {
-  if (props.row.roleId || props.row.roleId === 0)
+  if (props.row.id || props.row.id === 0)
     state.form = { ...props.row }
 })
 </script>
@@ -78,14 +73,14 @@ onMounted(() => {
       <el-form-item label="角色编码" prop="roleCode">
         <el-input v-model="state.form.roleCode" placeholder="角色编码" />
       </el-form-item>
-      <el-form-item label="描述" prop="description">
-        <el-input v-model="state.form.description" type="textarea" placeholder="描述" :maxlength="120" show-word-limit :rows="4" />
+      <el-form-item label="描述" prop="remark">
+        <el-input v-model="state.form.remark" type="textarea" placeholder="描述" :maxlength="120" show-word-limit :rows="4" />
       </el-form-item>
-      <el-form-item label="排序" prop="orderNo">
+      <el-form-item label="排序" prop="sort">
         <el-input-number
-          v-model="state.form.orderNo"
+          v-model="state.form.sort"
           controls-position="right"
-          @blur="methods.onOrderNoBlur"
+          :value-on-clear="1"
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">

@@ -1,11 +1,11 @@
 <script setup name="Role">
 import { onMounted, reactive, ref } from 'vue'
-import { Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import RoleForm from './RoleForm.vue'
 import PermissionAllocation from './PermissionAllocation.vue'
 import UserAllocation from './UserAllocation.vue'
-import { deleteRoleApi, getRolePaging } from '@/api/system/role'
+import { deleteBatchApi, getRolePaging } from '@/api/system/role'
 import usePagingParams from '@/hooks/usePagingParams'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
@@ -16,6 +16,7 @@ defineOptions({
 const appStore = useAppStore()
 const { current, size } = usePagingParams()
 const queryFormRef = ref()
+const tableRef = ref()
 const state = reactive({
   showPermissionAllocation: false,
   showUserAllocation: false,
@@ -48,9 +49,25 @@ const methods = {
     state.dialogShow = false
     methods.queryData()
   },
-  async del(row) {
-    const { ok } = await deleteRoleApi(row.roleId)
-    ok && methods.queryData()
+  async batchDel(id) {
+    if (id || id === 0) {
+      const { ok } = await deleteBatchApi([id])
+      ok && methods.queryData()
+    }
+    else {
+      const ids = tableRef.value.getSelectionRows().map(item => item.id)
+      ElMessageBox.confirm('确认删除选中数据吗?',
+        '注意',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        .then(async () => {
+          const { ok } = await deleteBatchApi(ids)
+          ok && methods.queryData()
+        })
+    }
   },
   openRoleForm(row) {
     state.currentRow = row
@@ -119,19 +136,28 @@ onMounted(() => {
             <el-button type="primary" :icon="Plus" @click="methods.openRoleForm({})">
               新增
             </el-button>
+            <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
+              删除
+            </el-button>
           </div>
           <div>
             <el-button :icon="Refresh" circle @click="methods.queryData" />
           </div>
         </div>
-        <el-table v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 350px)">
-          <el-table-column fixed="left" type="index" align="right" header-align="center" width="60px" />
+        <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 350px)">
+          <el-table-column type="selection" width="50" align="center" fixed="left" />
+          <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px">
+            <template #default="{ $index }">
+              {{ (current - 1) * size + $index + 1 }}
+            </template>
+          </el-table-column>
+
           <el-table-column
             prop="roleName" label="角色名称" fixed="left" align="left" header-align="center"
             min-width="180px"
           />
           <el-table-column prop="roleCode" label="角色编码" header-align="center" min-width="130px" />
-          <el-table-column prop="orderNo" label="排序" align="right" header-align="center" width="80px" />
+          <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
           <el-table-column label="状态" align="center" header-align="center" width="100px">
             <template #default="{ row }">
               <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
@@ -139,14 +165,17 @@ onMounted(() => {
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="description" label="描述" header-align="center" min-width="200px" />
+          <el-table-column prop="remark" label="描述" header-align="center" min-width="200px" />
           <el-table-column prop="createTime" label="创建时间" align="center" width="180px" />
           <el-table-column label="操作" align="center" fixed="right" width="220px">
             <template #default="{ row }">
               <el-button type="warning" link @click="methods.openRoleForm(row)">
                 编辑
               </el-button>
-              <el-popconfirm :title="`确认要删除【${row.roleName}】吗？`" @confirm="methods.del(row)">
+              <el-popconfirm
+                :hide-after="0"
+                :title="`确认要删除【${row.roleName}】吗？`" @confirm="methods.batchDel(row.id)"
+              >
                 <template #reference>
                   <el-button type="danger" link>
                     删除
@@ -173,8 +202,8 @@ onMounted(() => {
       v-if="state.dialogShow" v-model="state.dialogShow" :row="state.currentRow"
       @on-save-success="methods.saveSuccess"
     />
-    <PermissionAllocation v-if="state.showPermissionAllocation" v-model="state.showPermissionAllocation" :role-id="state.currentRow.roleId" :role-name="state.currentRow.roleName" />
-    <UserAllocation v-if="state.showUserAllocation" v-model="state.showUserAllocation" :role-id="state.currentRow.roleId" :role-name="state.currentRow.roleName" />
+    <PermissionAllocation v-if="state.showPermissionAllocation" v-model="state.showPermissionAllocation" :role-id="state.currentRow.id" :role-name="state.currentRow.roleName" />
+    <UserAllocation v-if="state.showUserAllocation" v-model="state.showUserAllocation" :role-id="state.currentRow.id" :role-name="state.currentRow.roleName" />
   </el-container>
 </template>
 

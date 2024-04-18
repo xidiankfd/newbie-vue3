@@ -87,7 +87,7 @@ const methods = {
       userIds.push(userId)
 
     else
-      tableRef1.value && tableRef1.value.getSelectionRows().forEach(item => userIds.push(item.userId))
+      tableRef1.value && tableRef1.value.getSelectionRows().forEach(item => userIds.push(item.id))
 
     if (!userIds.length) {
       ElMessage.warning('请选择用户')
@@ -107,7 +107,7 @@ const methods = {
       userIds.push(userId)
 
     else
-      tableRef.value && tableRef.value.getSelectionRows().forEach(item => userIds.push(item.userId))
+      tableRef.value && tableRef.value.getSelectionRows().forEach(item => userIds.push(item.id))
 
     if (!userIds.length) {
       ElMessage.warning('请选择用户')
@@ -128,7 +128,7 @@ onMounted(() => {
 const columns = [
   { id: 'nickName', label: '昵称', width: '' },
   { id: 'username', label: '用户名', width: '' },
-  { id: 'mobile', label: '手机号', width: '' },
+  { id: 'phone', label: '手机号', width: '' },
 ]
 </script>
 
@@ -165,7 +165,7 @@ const columns = [
       </div>
     </div>
     <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.assedTableData" border stripe>
-      <el-table-column type="selection" width="55" />
+      <el-table-column type="selection" width="50" align="center" />
       <el-table-column
         v-for="col in columns"
         :key="col.id"
@@ -176,7 +176,7 @@ const columns = [
       />
       <el-table-column label="操作" width="120" align="center">
         <template #default="{ row }">
-          <el-button type="danger" link @click="methods.remove(row.userId)">
+          <el-button type="danger" link @click="methods.remove(row.id)">
             取消关联
           </el-button>
         </template>
@@ -223,7 +223,7 @@ const columns = [
         </div>
       </div>
       <el-table ref="tableRef1" v-loading="state.queryLoading1" :data="state.assTableData" border stripe max-height="300">
-        <el-table-column type="selection" width="55" />
+        <el-table-column type="selection" width="50" align="center" />
         <el-table-column
           v-for="col in columns"
           :key="col.id"
@@ -234,7 +234,7 @@ const columns = [
         />
         <el-table-column label="操作" width="80" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="methods.relevancy(row.userId)">
+            <el-button type="primary" link @click="methods.relevancy(row.id)">
               关联
             </el-button>
           </template>

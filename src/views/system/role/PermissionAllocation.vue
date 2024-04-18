@@ -49,7 +49,7 @@ onMounted(() => {
   methods.getCheckedKeys()
 })
 const defaultProps = {
-  id: 'menuId',
+  id: 'id',
   label: 'title',
   children: 'children',
 }

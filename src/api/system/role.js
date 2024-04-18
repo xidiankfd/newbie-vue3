@@ -17,17 +17,17 @@ export function getRolePaging(params) {
  * @returns {Promise}
  */
 export function saveRoleApi(data) {
-  if (data.roleId || data.roleId === 0)
-    return axios.put(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
+  if (data.id || data.id === 0)
+    return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })
 }
 
 /**
- * 删除角色
- * @param {*} id 角色ID
+ * 批量删除角色
+ * @param {*} ids 角色ID
  * @returns {Promise}
  */
-export function deleteRoleApi(id) {
-  return axios.delete(`${BASE_URL}/${id}`, { successMsgType: msgType.msg })
+export function deleteBatchApi(ids) {
+  return axios.post(`${BASE_URL}/deleteBatch`, ids, { successMsgType: msgType.msg })
 }

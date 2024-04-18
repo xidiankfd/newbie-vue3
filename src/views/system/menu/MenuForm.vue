@@ -148,16 +148,6 @@ const methods = {
       return
     formEl.resetFields()
   },
-  orderNoBlur(flag) {
-    if (flag === 'but') {
-      if (!state.formBut.sort && state.formBut.sort !== 0)
-        state.formBut.sort = 1
-    }
-    else {
-      if (!state.form.sort && state.form.sort !== 0)
-        state.form.sort = 1
-    }
-  },
 }
 const drawerTitle = computed(() => {
   if (props.row.id || props.row.id === 0)
@@ -275,7 +265,7 @@ nextTick(() => {
             </el-col>
             <el-col :span="24" :offset="0">
               <el-form-item label="排序" prop="sort">
-                <el-input-number v-model="state.form.sort" controls-position="right" @blur="methods.orderNoBlur" />
+                <el-input-number v-model="state.form.sort" controls-position="right" :value-on-clear="1" />
               </el-form-item>
             </el-col>
             <el-col :span="8" :offset="0">
@@ -375,7 +365,7 @@ nextTick(() => {
           <el-form-item label="排序" prop="sort">
             <el-input-number
               v-model="state.formBut.sort" controls-position="right"
-              @blur="methods.orderNoBlur('but')"
+              :value-on-clear="1"
             />
           </el-form-item>
 
