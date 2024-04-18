@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import DictDataForm from './DictDataForm.vue'
 import DictTypeSelect from './DictTypeSelect.vue'
 import {
@@ -90,17 +90,11 @@ const methods = {
     const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
     if (ok)
       state.commonStatusList = data
-
-    else
-      ElMessage.error('获取通用状态字典数据失败')
   },
   async getEleTypeDict() {
     const { ok, data } = await getDictDataListByTypeCodeApi('eleType')
     if (ok)
       state.eleTypeList = data
-
-    else
-      ElMessage.error('获取元素类型字典数据失败')
   },
 
 }

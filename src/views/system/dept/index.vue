@@ -1,10 +1,10 @@
 <script setup name="Dept">
 import { onMounted, reactive, ref } from 'vue'
-import { Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
+import { Minus, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import useCutTree from 'cut-tree'
-import { ElMessage } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import DeptForm from './DeptForm.vue'
-import { deleteApi, getDeptTreeApi } from '@/api/system/dept'
+import { deleteBatchApi, getDeptTreeApi } from '@/api/system/dept'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
@@ -48,30 +48,27 @@ const methods = {
     forEach(state.tableData, row => tableRef.value.toggleRowExpansion(row, !state.tableIsExpansionAll))
     state.tableIsExpansionAll = !state.tableIsExpansionAll
   },
-  // 递归获取所有子级数据id
-  recursionGetdeptIds(depts, deptIds) {
-    depts.forEach((dept) => {
-      deptIds.push(dept.id)
-      if (dept.children?.length)
-        methods.recursionGetdeptIds(dept.children, deptIds)
-    })
-  },
-  // 删除点击事件
-  onDelClick(row) {
-    const deptIds = []
-    if (row.children?.length) {
-      deptIds.push(row.id)
-      methods.recursionGetdeptIds(row.children, deptIds)
+
+  // 批量删除
+  async delBatch(id) {
+    if (id || id === 0) {
+      const { ok } = await deleteBatchApi([id])
+      ok && methods.queryData()
     }
     else {
-      deptIds.push(row.id)
+      const ids = tableRef.value.getSelectionRows().map(item => item.id)
+      ElMessageBox.confirm('确认删除选中数据吗?',
+        '注意',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        .then(async () => {
+          const { ok } = await deleteBatchApi(ids)
+          ok && methods.queryData()
+        })
     }
-    methods.delBatch(deptIds)
-  },
-  // 删除数据及子数据
-  async delBatch(deptIds) {
-    const { ok } = await deleteApi(deptIds)
-    ok && methods.queryData()
   },
   openDeptForm(row) {
     state.currentRow = row
@@ -86,9 +83,6 @@ const methods = {
     const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
     if (ok)
       state.commonStatusList = data
-
-    else
-      ElMessage.error('获取通用状态字典数据失败')
   },
 }
 onMounted(() => {
@@ -138,6 +132,9 @@ onMounted(() => {
             <el-button v-hasPerm="'sys:menu:add'" type="primary" :icon="Plus" @click="methods.openDeptForm({})">
               新增
             </el-button>
+            <el-button type="danger" :icon="Minus" @click="methods.delBatch(null)">
+              删除
+            </el-button>
             <el-button :icon="Sort" @click="methods.expansionTable">
               {{ state.tableIsExpansionAll ? '合并所有' : '展开所有' }}
             </el-button>
@@ -150,6 +147,7 @@ onMounted(() => {
           ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="id"
           height="calc(100vh - 300px)"
         >
+          <el-table-column type="selection" width="55" />
           <el-table-column
             prop="deptName" label="部门名称" min-width="180px" fixed="left" align="left"
             header-align="center"
@@ -191,7 +189,9 @@ onMounted(() => {
               <el-button v-hasPerm="'sys:menu:edit'" type="warning" link @click="methods.openDeptForm(row)">
                 编辑
               </el-button>
-              <el-popconfirm :title="`确认要删除【${row.deptName}】吗？`" @confirm="methods.onDelClick(row)">
+              <el-popconfirm
+                :hide-after="0" :title="`确认要删除【${row.deptName}】吗？`" @confirm="methods.delBatch(row.id)"
+              >
                 <template #reference>
                   <el-button v-hasPerm="'sys:menu:del'" type="danger" link>
                     删除

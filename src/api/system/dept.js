@@ -24,10 +24,10 @@ export function saveDeptApi(data) {
 }
 
 /**
- * 删除部门
+ * 批量删除
  * @param {*} deptIds 部门ID列表
  * @returns {Promise}
  */
-export function deleteApi(deptIds) {
-  return axios.post(`${BASE_URL}/delete`, deptIds, { successMsgType: msgType.msg })
+export function deleteBatchApi(deptIds) {
+  return axios.post(`${BASE_URL}/deleteBatch`, deptIds, { successMsgType: msgType.msg })
 }
