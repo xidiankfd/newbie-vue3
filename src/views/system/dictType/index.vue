@@ -117,13 +117,13 @@ onMounted(() => {
       <el-card class="mt-2" :shadow="appStore.appConfig.elChardShadow">
         <div class="w-full pb-3 flex justify-between">
           <div>
-            <el-button type="primary" :icon="Plus" @click="methods.openEditForm({})">
+            <el-button v-hasPerm="'sys.dict.type.add'" type="primary" :icon="Plus" @click="methods.openEditForm({})">
               新增
             </el-button>
-            <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
+            <el-button v-hasPerm="'sys.dict.type.del'" type="danger" :icon="Minus" @click="methods.batchDel(null)">
               删除
             </el-button>
-            <el-button type="primary" plain @click="router.push({ name: 'DictData' })">
+            <el-button v-hasPerm="'sys.dict.data'" type="primary" plain @click="router.push({ name: 'DictData' })">
               字典数据
             </el-button>
           </div>
@@ -150,14 +150,17 @@ onMounted(() => {
           </el-table-column>
           <el-table-column prop="remark" label="备注" header-align="center" min-width="200px" />
           <el-table-column prop="createTime" label="创建时间" align="center" width="180px" />
-          <el-table-column label="操作" align="center" fixed="right" width="170px">
+          <el-table-column
+            v-hasPerm="['sys.dict.type.update', 'sys.dict.type.del']"
+            label="操作" align="center" fixed="right" width="170px"
+          >
             <template #default="{ row }">
-              <el-button type="warning" link @click="methods.openEditForm(row)">
+              <el-button v-hasPerm="'sys.dict.type.update'" type="warning" link @click="methods.openEditForm(row)">
                 编辑
               </el-button>
               <el-popconfirm :hide-after="0" :title="`确认要删除【${row.typeName}】吗？`" @confirm="methods.batchDel(row.id)">
                 <template #reference>
-                  <el-button type="danger" link>
+                  <el-button v-hasPerm="'sys.dict.type.del'" type="danger" link>
                     删除
                   </el-button>
                 </template>

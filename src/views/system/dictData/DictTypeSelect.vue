@@ -58,7 +58,7 @@ onMounted(() => {
         @keyup.enter="methods.queryData"
       />
       <el-button :loading="state.queryLoading" type="primary" plain size="default" :icon="Search" class="ml-5" @click="methods.queryData" />
-      <el-button type="primary" size="default" link @click="methods.onDictTypeManageClick">
+      <el-button v-hasPerm="'sys.dict.type'" type="primary" size="default" link @click="methods.onDictTypeManageClick">
         管理
       </el-button>
     </template>
@@ -77,7 +77,7 @@ onMounted(() => {
           <span v-else>{{ row.typeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" width="60">
+      <el-table-column v-hasPerm="'sys.dict.type.update'" label="操作" fixed="right" width="60">
         <template #default="{ row }">
           <el-button v-if="row.edit" type="primary" size="default" link @click="methods.onUpdateDictTypeName(row)">
             <template #icon>

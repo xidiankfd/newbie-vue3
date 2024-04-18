@@ -129,10 +129,10 @@ onMounted(() => {
       <el-card :shadow="appStore.appConfig.elChardShadow" class="mt-2">
         <div class="w-full pb-3 flex justify-between">
           <div>
-            <el-button v-hasPerm="'sys:menu:add'" type="primary" :icon="Plus" @click="methods.openDeptForm({})">
+            <el-button v-hasPerm="'sys.dept.add'" type="primary" :icon="Plus" @click="methods.openDeptForm({})">
               新增
             </el-button>
-            <el-button type="danger" :icon="Minus" @click="methods.delBatch(null)">
+            <el-button v-hasPerm="'sys.dept.del'" type="danger" :icon="Minus" @click="methods.delBatch(null)">
               删除
             </el-button>
             <el-button :icon="Sort" @click="methods.expansionTable">
@@ -178,22 +178,25 @@ onMounted(() => {
             show-overflow-tooltip
           />
           <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center" />
-          <el-table-column label="操作" min-width="170" align="center" fixed="right">
+          <el-table-column
+            v-hasPerm="['sys.dept.add', 'sys.dept.update', 'sys.dept.del']"
+            label="操作" min-width="170" align="center" fixed="right"
+          >
             <template #default="{ row }">
               <el-button
-                v-hasPerm="'sys:menu:add'" :disabled="row.type === '0'" type="primary" link
+                v-hasPerm="'sys.dept.add'" :disabled="row.type === '0'" type="primary" link
                 @click="methods.openDeptForm({ parentId: row.id })"
               >
                 新增
               </el-button>
-              <el-button v-hasPerm="'sys:menu:edit'" type="warning" link @click="methods.openDeptForm(row)">
+              <el-button v-hasPerm="'sys.dept.update'" type="warning" link @click="methods.openDeptForm(row)">
                 编辑
               </el-button>
               <el-popconfirm
                 :hide-after="0" :title="`确认要删除【${row.deptName}】吗？`" @confirm="methods.delBatch(row.id)"
               >
                 <template #reference>
-                  <el-button v-hasPerm="'sys:menu:del'" type="danger" link>
+                  <el-button v-hasPerm="'sys.dept.del'" type="danger" link>
                     删除
                   </el-button>
                 </template>

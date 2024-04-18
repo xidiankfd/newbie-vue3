@@ -133,10 +133,10 @@ onMounted(() => {
       <el-card class="mt-2" :shadow="appStore.appConfig.elChardShadow">
         <div class="w-full pb-3 flex justify-between">
           <div>
-            <el-button type="primary" :icon="Plus" @click="methods.openRoleForm({})">
+            <el-button v-hasPerm="'sys.role.add'" type="primary" :icon="Plus" @click="methods.openRoleForm({})">
               新增
             </el-button>
-            <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
+            <el-button v-hasPerm="'sys.role.del'" type="danger" :icon="Minus" @click="methods.batchDel(null)">
               删除
             </el-button>
           </div>
@@ -167,9 +167,12 @@ onMounted(() => {
           </el-table-column>
           <el-table-column prop="remark" label="描述" header-align="center" min-width="200px" />
           <el-table-column prop="createTime" label="创建时间" align="center" width="180px" />
-          <el-table-column label="操作" align="center" fixed="right" width="220px">
+          <el-table-column
+            v-hasPerm="['sys.role.add', 'sys.role.update', 'sys.role.perm', 'sys.role.user']"
+            label="操作" align="center" fixed="right" width="220px"
+          >
             <template #default="{ row }">
-              <el-button type="warning" link @click="methods.openRoleForm(row)">
+              <el-button v-hasPerm="'sys.role.update'" type="warning" link @click="methods.openRoleForm(row)">
                 编辑
               </el-button>
               <el-popconfirm
@@ -177,15 +180,15 @@ onMounted(() => {
                 :title="`确认要删除【${row.roleName}】吗？`" @confirm="methods.batchDel(row.id)"
               >
                 <template #reference>
-                  <el-button type="danger" link>
+                  <el-button v-hasPerm="'sys.role.del'" type="danger" link>
                     删除
                   </el-button>
                 </template>
               </el-popconfirm>
-              <el-button type="success" link @click="methods.openDialog(row, 'showPermissionAllocation')">
+              <el-button v-hasPerm="'sys.role.perm'" type="success" link @click="methods.openDialog(row, 'showPermissionAllocation')">
                 权限
               </el-button>
-              <el-button type="primary" link @click="methods.openDialog(row, 'showUserAllocation')">
+              <el-button v-hasPerm="'sys.role.user'" type="primary" link @click="methods.openDialog(row, 'showUserAllocation')">
                 用户
               </el-button>
             </template>

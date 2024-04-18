@@ -159,10 +159,10 @@ onMounted(() => {
         <el-card :shadow="appStore.appConfig.elChardShadow" class="mt-2">
           <div class="w-full pb-3 flex justify-between">
             <div>
-              <el-button type="primary" :icon="Plus" @click="methods.openUserForm">
+              <el-button v-hasPerm="'sys.user.add'" type="primary" :icon="Plus" @click="methods.openUserForm">
                 新增
               </el-button>
-              <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
+              <el-button v-hasPerm="'sys.user.del'" type="danger" :icon="Minus" @click="methods.batchDel(null)">
                 删除
               </el-button>
             </div>
@@ -217,21 +217,24 @@ onMounted(() => {
               </template>
             </el-table-column>
             <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
-            <el-table-column label="操作" align="center" width="200px" fixed="right">
+            <el-table-column
+              v-hasPerm="['sys.user.update', 'sys.user.del', 'sys.user.update.password']"
+              label="操作" align="center" width="200px" fixed="right"
+            >
               <template #default="{ row }">
-                <el-button type="warning" link @click="methods.openUserForm(row)">
+                <el-button v-hasPerm="'sys.user.update'" type="warning" link @click="methods.openUserForm(row)">
                   编辑
                 </el-button>
                 <el-popconfirm
                   :hide-after="0" :title="`确认要删除 ${row.username} 吗？`" @confirm="methods.batchDel(row.id)"
                 >
                   <template #reference>
-                    <el-button type="danger" link>
+                    <el-button v-hasPerm="'sys.user.del'" type="danger" link>
                       删除
                     </el-button>
                   </template>
                 </el-popconfirm>
-                <el-button type="info" link @click="methods.openUpdatePasswordDialog(row)">
+                <el-button v-hasPerm="'sys.user.update.password'" type="info" link @click="methods.openUpdatePasswordDialog(row)">
                   修改密码
                 </el-button>
               </template>

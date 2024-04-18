@@ -140,10 +140,10 @@ onMounted(() => {
           <el-card class="mt-2" :shadow="appStore.appConfig.elChardShadow">
             <div class="w-full pb-3 flex justify-between">
               <div>
-                <el-button type="primary" :icon="Plus" @click="methods.openEditForm({})">
+                <el-button v-hasPerm="'sys.dict.data.add'" type="primary" :icon="Plus" @click="methods.openEditForm({})">
                   新增
                 </el-button>
-                <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
+                <el-button v-hasPerm="'sys.dict.data.del'" type="danger" :icon="Minus" @click="methods.batchDel(null)">
                   删除
                 </el-button>
               </div>
@@ -194,9 +194,12 @@ onMounted(() => {
               </el-table-column>
               <el-table-column prop="remark" label="备注" header-align="center" min-width="200px" />
               <el-table-column prop="createTime" label="创建时间" align="center" width="180px" />
-              <el-table-column label="操作" header-align="center" fixed="right" width="170px">
+              <el-table-column
+                v-hasPerm="['sys.dict.data.update', 'sys.dict.data.del', 'sys.dict.data.def']"
+                label="操作" header-align="center" fixed="right" width="170px"
+              >
                 <template #default="{ row }">
-                  <el-button type="warning" link @click="methods.openEditForm(row)">
+                  <el-button v-hasPerm="'sys.dict.data.update'" type="warning" link @click="methods.openEditForm(row)">
                     编辑
                   </el-button>
                   <el-popconfirm
@@ -204,13 +207,14 @@ onMounted(() => {
                     :title="`确认要删除【${row.label}】吗？`" @confirm="methods.batchDel(row.id)"
                   >
                     <template #reference>
-                      <el-button type="danger" link>
+                      <el-button v-hasPerm="'sys.dict.data.del'" type="danger" link>
                         删除
                       </el-button>
                     </template>
                   </el-popconfirm>
                   <el-button
-                    v-if="row.def === 'N'" type="success" link
+                    v-if="row.def === 'N'"
+                    v-hasPerm="'sys.dict.data.def'" type="success" link
                     @click="methods.updateDictDataAsDefaultApi(row)"
                   >
                     默认
