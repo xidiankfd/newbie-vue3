@@ -37,7 +37,7 @@ const state = reactive({
     username: props.row.username || '',
     password: '',
     nickName: props.row.nickName || '',
-    mobile: props.row.mobile || '',
+    phone: props.row.phone || '',
     email: props.row.email || '',
     gender: props.row.gender || props.userGenderList.find(item => item.def === 'Y')?.value,
     status: props.row.status || '1',
@@ -137,8 +137,8 @@ onMounted(() => {
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="手机号码" prop="mobile" class="w-full">
-            <el-input v-model="state.formData.mobile" placeholder="请输入手机号码" maxlength="11" />
+          <el-form-item label="手机号码" prop="phone" class="w-full">
+            <el-input v-model="state.formData.phone" placeholder="请输入手机号码" maxlength="11" />
           </el-form-item>
         </el-col>
         <el-col :span="12">

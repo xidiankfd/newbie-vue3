@@ -156,7 +156,7 @@ onMounted(() => {
               height="calc(100vh - 350px)"
             >
               <el-table-column type="selection" width="55" />
-              <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px">
+              <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="65px">
                 <template #default="{ $index }">
                   {{ (current - 1) * size + $index + 1 }}
                 </template>
@@ -167,11 +167,11 @@ onMounted(() => {
               />
               <el-table-column
                 prop="value" label="值" fixed="left" align="left" header-align="center"
-                min-width="80px"
+                min-width="100px"
               />
-              <el-table-column prop="sort" label="排序" align="right" header-align="center" width="60px" />
+              <el-table-column prop="sort" label="排序" align="right" header-align="center" width="65px" />
 
-              <el-table-column label="元素类型" align="center" header-align="center" width="100px">
+              <el-table-column label="元素类型" align="center" header-align="center" width="120px">
                 <template #default="{ row }">
                   <el-tag v-if="row.eleType" :type="state.eleTypeList.find(item => item.value === row.eleType)?.eleType">
                     {{ state.eleTypeList.find(item => item.value === row.eleType)?.label }}
@@ -185,7 +185,7 @@ onMounted(() => {
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="状态" align="center" header-align="center" width="80px">
+              <el-table-column label="状态" align="center" header-align="center" width="100px">
                 <template #default="{ row }">
                   <el-tag v-if="row.status" :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
                     {{ state.commonStatusList.find(item => item.value === row.status)?.label }}

@@ -176,7 +176,7 @@ onMounted(() => {
             height="calc(100vh - 343px)"
           >
             <el-table-column type="selection" width="50" align="center" fixed="left" />
-            <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px">
+            <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="65px">
               <template #default="{ $index }">
                 {{ (current - 1) * size + $index + 1 }}
               </template>
@@ -200,16 +200,16 @@ onMounted(() => {
                 />
               </template>
 </el-table-column> -->
-            <el-table-column prop="mobile" label="手机号" align="center" width="140px" />
+            <el-table-column prop="phone" label="手机号" align="center" width="150px" />
             <el-table-column prop="email" label="邮箱" header-align="center" min-width="160px" show-overflow-tooltip />
-            <el-table-column prop="gender" label="性别" align="center" width="80px">
+            <el-table-column prop="gender" label="性别" align="center" width="100px">
               <template #default="{ row }">
                 <el-tag :type="state.userGenderList.find(item => item.value === row.gender)?.eleType || ''">
                   {{ state.userGenderList.find(item => item.value === row.gender)?.label }}
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="状态" align="center" width="80px">
+            <el-table-column prop="status" label="状态" align="center" width="100px">
               <template #default="{ row }">
                 <el-tag :type="state.userStatusList.find(item => item.value === row.status)?.eleType || ''">
                   {{ state.userStatusList.find(item => item.value === row.status)?.label }}

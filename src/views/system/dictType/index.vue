@@ -133,7 +133,7 @@ onMounted(() => {
         </div>
         <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 350px)">
           <el-table-column type="selection" width="55" />
-          <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px">
+          <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="65px">
             <template #default="{ $index }">
               {{ (current - 1) * size + $index + 1 }}
             </template>
@@ -152,7 +152,7 @@ onMounted(() => {
           <el-table-column prop="createTime" label="创建时间" align="center" width="180px" />
           <el-table-column
             v-hasPerm="['sys.dict.type.update', 'sys.dict.type.del']"
-            label="操作" align="center" fixed="right" width="170px"
+            label="操作" align="center" fixed="right" width="120px"
           >
             <template #default="{ row }">
               <el-button v-hasPerm="'sys.dict.type.update'" type="warning" link @click="methods.openEditForm(row)">
