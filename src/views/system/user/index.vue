@@ -1,10 +1,10 @@
 <script setup name="User">
-import { onMounted, reactive } from 'vue'
-import { Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { onMounted, reactive, ref } from 'vue'
+import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import UserForm from './UserForm.vue'
 import UpdateUserPassword from './UpdateUserPassword.vue'
-import { deleteUserApi, getUserPaging } from '@/api/system/user'
+import { deleteBatchApi, getUserPaging } from '@/api/system/user'
 import { getDeptTreeApi } from '@/api/system/dept'
 import ElTreeList from '@/components/el-tree-list/index.vue'
 import usePagingParams from '@/hooks/usePagingParams'
@@ -13,7 +13,7 @@ import { useAppStore } from '@/stores/modules/app'
 
 const appStore = useAppStore()
 const { current, size } = usePagingParams()
-
+const tableRef = ref()
 /** 定义响应式变量 */
 const state = reactive({
   showUpdatePasswordDialog: false,
@@ -57,9 +57,25 @@ const methods = {
     state.total = data.total
     state.queryLoading = false
   },
-  async delUser(userId) {
-    const { ok } = await deleteUserApi(userId)
-    ok && methods.queryData()
+  async batchDel(id) {
+    if (id || id === 0) {
+      const { ok } = await deleteBatchApi([id])
+      ok && methods.queryData()
+    }
+    else {
+      const ids = tableRef.value.getSelectionRows().map(item => item.id)
+      ElMessageBox.confirm('确认删除选中数据吗?',
+        '注意',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        .then(async () => {
+          const { ok } = await deleteBatchApi(ids)
+          ok && methods.queryData()
+        })
+    }
   },
   openUserForm(row) {
     state.currentRow = row || {}
@@ -101,7 +117,7 @@ onMounted(() => {
         <ElTreeList
           v-model="state.queryForm.deptId"
           style="height: 100%;"
-          :data="state.deptTree" :tree-props="{ id: 'deptId', label: 'deptName' }" filterable
+          :data="state.deptTree" :tree-props="{ id: 'id', label: 'deptName' }" filterable
           title="部门" height="100%" header-height="50px" @node-click="methods.queryData"
         />
       </el-col>
@@ -136,15 +152,25 @@ onMounted(() => {
               <el-button type="primary" :icon="Plus" @click="methods.openUserForm">
                 新增
               </el-button>
+              <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
+                删除
+              </el-button>
             </div>
             <div>
               <el-button :icon="Refresh" circle @click="methods.queryData" />
             </div>
           </div>
           <el-table
+            ref="tableRef"
             v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="menuId"
             height="calc(100vh - 343px)"
           >
+            <el-table-column type="selection" width="50" align="center" fixed="left" />
+            <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="60px">
+              <template #default="{ $index }">
+                {{ (current - 1) * size + $index + 1 }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="nickName" label="昵称" header-align="center" width="120px" fixed="left"
               show-overflow-tooltip
@@ -180,13 +206,15 @@ onMounted(() => {
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="orderNo" label="排序" align="right" header-align="center" width="80px" />
+            <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
             <el-table-column label="操作" align="center" width="200px" fixed="right">
               <template #default="{ row }">
                 <el-button type="warning" link @click="methods.openUserForm(row)">
                   编辑
                 </el-button>
-                <el-popconfirm :title="`确认要删除 ${row.username} 吗？`" @confirm="methods.delUser(row.userId)">
+                <el-popconfirm
+                  :hide-after="0" :title="`确认要删除 ${row.username} 吗？`" @confirm="methods.batchDel(row.id)"
+                >
                   <template #reference>
                     <el-button type="danger" link>
                       删除

@@ -19,7 +19,7 @@ const state = reactive({
     label: props.row.label || '',
     value: props.row.value || '',
     typeId: null,
-    eleType: props.row.id ? props.row.eleType : props.eleTypeList.find(item => item.asDefault === 'Y')?.value,
+    eleType: props.row.id ? props.row.eleType : props.eleTypeList.find(item => item.def === 'Y')?.value,
     eleClass: props.row.eleClass || '',
     sort: props.row.sort || 1,
     status: props.row.status || '1',

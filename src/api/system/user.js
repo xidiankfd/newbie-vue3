@@ -19,20 +19,20 @@ export function getUserPaging(current, size, params = {}) {
  * @returns {Promise}
  */
 export function saveUserApi(data) {
-  if (data.userId || data.userId === 0)
-    return axios.put(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
+  if (data.id || data.id === 0)
+    return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
 
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })
 }
 
 /**
- * 删除用户
- * @param {Number} id 用户ID
+ * 批量删除用户
+ * @param {Array} ids id列表
  * @returns {Promise}
  */
-export function deleteUserApi(id) {
-  return axios.delete(`${BASE_URL}/${id}`, { successMsgType: msgType.msg })
+export function deleteBatchApi(ids) {
+  return axios.post(`${BASE_URL}/deleteBatch`, ids, { successMsgType: msgType.msg })
 }
 
 /**

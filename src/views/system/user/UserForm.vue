@@ -22,7 +22,7 @@ const showDialog = computed({
 })
 const treeProps = {
   label: 'deptName',
-  value: 'deptId',
+  value: 'id',
 }
 const formRef = ref()
 
@@ -32,17 +32,17 @@ const state = reactive({
   saveLoading: false, // 保存按钮loading
   // 表单数据
   formData: {
-    userId: (props.row.userId || props.row.userId === 0) ? props.row.userId : null,
+    id: (props.row.id || props.row.id === 0) ? props.row.id : null,
     deptId: (props.row.deptId || props.row.deptId === 0) ? props.row.deptId : null,
     username: props.row.username || '',
     password: '',
     nickName: props.row.nickName || '',
     mobile: props.row.mobile || '',
     email: props.row.email || '',
-    gender: props.row.gender || props.userGenderList.find(item => item.asDefault === 'Y')?.value,
+    gender: props.row.gender || props.userGenderList.find(item => item.def === 'Y')?.value,
     status: props.row.status || '1',
-    orderNo: props.row.orderNo || 1,
-    description: props.row.description || '',
+    sort: props.row.sort || 1,
+    remark: props.row.remark || '',
   },
   deptTree: [],
   roleList: [],
@@ -101,7 +101,7 @@ const methods = {
 }
 const dialogTitle = computed(() => state.isUpdate ? '修改用户' : '新增用户')
 onMounted(() => {
-  state.isUpdate = props.row.userId || props.row.userId === 0
+  state.isUpdate = props.row.id || props.row.id === 0
   methods.initDeptTree()
 })
 </script>
@@ -129,7 +129,7 @@ onMounted(() => {
           <el-form-item label="所属部门" class="w-full">
             <el-tree-select
               v-model="state.formData.deptId" placeholder="所属部门" class="w-full" clearable
-              :data="state.deptTree" :props="treeProps" node-key="deptId" check-strictly
+              :data="state.deptTree" :props="treeProps" node-key="id" check-strictly
             />
           </el-form-item>
         </el-col>
@@ -159,14 +159,17 @@ onMounted(() => {
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="排序" prop="orderNo" class="w-full">
-            <el-input-number v-model="state.formData.orderNo" :min="0" placeholder="请输入排序" />
+          <el-form-item label="排序" prop="sort" class="w-full">
+            <el-input-number
+              v-model="state.formData.sort"
+              :value-on-clear="1"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="用户描述" prop="description">
+          <el-form-item label="用户描述" prop="remark">
             <el-input
-              v-model="state.formData.description" type="textarea" placeholder="请输入用户描述" maxlength="120"
+              v-model="state.formData.remark" type="textarea" placeholder="请输入用户描述" maxlength="120"
               show-word-limit :rows="4"
             />
           </el-form-item>
