@@ -41,7 +41,7 @@ const state = reactive({
     email: props.row.email || '',
     gender: props.row.gender || props.userGenderList.find(item => item.def === 'Y')?.value,
     status: props.row.status || '1',
-    sort: props.row.sort || 1,
+    sort: props.row.sort || props.row.sort === 0 ? props.row.sort : 1,
     remark: props.row.remark || '',
   },
   deptTree: [],

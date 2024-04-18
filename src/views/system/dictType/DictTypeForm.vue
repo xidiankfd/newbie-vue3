@@ -17,7 +17,7 @@ const state = reactive({
     id: props.row.id || null,
     typeName: props.row.typeName || '',
     typeCode: props.row.typeCode || '',
-    sort: props.row.sort || 1,
+    sort: props.row.sort || props.row.sort === 0 ? props.row.sort : 1,
     status: props.row.status || '1',
     remark: props.row.remark || '',
   },

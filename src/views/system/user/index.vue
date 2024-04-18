@@ -24,6 +24,7 @@ const state = reactive({
   currentRow: {},
   showDialog: false,
   queryLoading: false,
+  deptLoading: false,
   total: 0,
   tableData: [],
   queryForm: {
@@ -41,13 +42,17 @@ const methods = {
 
   // 初始化部门数据
   async initDeptTree() {
+    state.deptLoading = true
     const { data } = await getDeptTreeApi()
     state.rawDeptTree = data
-    state.deptTree = data
-    state.deptTree.unshift({
-      deptName: '全部',
-      deptId: '',
-    })
+    state.deptTree = [
+      {
+        deptName: '全部',
+        id: '',
+      },
+      ...data,
+    ]
+    state.deptLoading = false
   },
   // 查询数据
   async queryData() {
@@ -118,7 +123,8 @@ onMounted(() => {
           v-model="state.queryForm.deptId"
           style="height: 100%;"
           :data="state.deptTree" :tree-props="{ id: 'id', label: 'deptName' }" filterable
-          title="部门" height="100%" header-height="50px" @node-click="methods.queryData"
+          title="部门" height="100%" header-height="50px" :loading="state.deptLoading"
+          @node-click="methods.queryData"
         />
       </el-col>
       <el-col :span="20" :offset="0">

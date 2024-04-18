@@ -21,7 +21,7 @@ const state = reactive({
     typeId: null,
     eleType: props.row.id ? props.row.eleType : props.eleTypeList.find(item => item.def === 'Y')?.value,
     eleClass: props.row.eleClass || '',
-    sort: props.row.sort || 1,
+    sort: props.row.sort || props.row.sort === 0 ? props.row.sort : 1,
     status: props.row.status || '1',
     remark: props.row.remark || '',
   },
