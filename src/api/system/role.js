@@ -25,7 +25,7 @@ export function saveRoleApi(data) {
 
 /**
  * 批量删除角色
- * @param {*} ids 角色ID
+ * @param {*} ids id列表
  * @returns {Promise}
  */
 export function deleteBatchApi(ids) {

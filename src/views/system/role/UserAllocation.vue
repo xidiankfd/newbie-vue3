@@ -2,8 +2,7 @@
 import { computed, onMounted, reactive, ref, toRaw } from 'vue'
 import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { queryUnUserByRoleIdApi, queryUserByRoleIdApi } from '@/api/system/user'
-import { appendApi, cancelBatch } from '@/api/system/user_role'
+import { appendApi, cancelBatch, queryUnUserByRoleIdApi, queryUserByRoleIdApi } from '@/api/system/user_role'
 import usePagingParams from '@/hooks/usePagingParams'
 
 const props = defineProps({

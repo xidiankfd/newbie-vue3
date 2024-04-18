@@ -39,38 +39,14 @@ export function deleteBatchApi(ids) {
  * 修改用户密码
  * @param {Number} userId
  * @param {String} newPassword
- * @param {String} confirmNewPassword
+ * @param {String} confirmPassword
  * @returns {Promise}
  */
-export function updateUserPassword(userId, newPassword, confirmNewPassword) {
+export function updateUserPassword(userId, newPassword, confirmPassword) {
   const data = {
     userId,
     newPassword,
-    confirmNewPassword,
+    confirmPassword,
   }
-  return axios.put(`${BASE_URL}/updateUserPassword`, data, { successMsgType: msgType.msg })
-}
-
-/**
- * 根据角色id查询已分配用户
- * @param {Number} current 当前页
- * @param {Number} size 页大小
- * @param {Number} roleId 角色ID
- * @param {Object} params 其它参数
- * @returns {Promise}
- */
-export function queryUserByRoleIdApi(current, size, roleId, params) {
-  return axios.get(`${BASE_URL}/queryUserByRoleId/${roleId}`, { params: { current, size, ...params } })
-}
-
-/**
- * 根据角色id查询未分配用户
- * @param {Number} current 当前页
- * @param {Number} size 页大小
- * @param {Number} roleId 角色ID
- * @param {Object} params 其它参数
- * @returns {Promise}
- */
-export function queryUnUserByRoleIdApi(current, size, roleId, params) {
-  return axios.get(`${BASE_URL}/queryUnUserByRoleId/${roleId}`, { params: { current, size, ...params } })
+  return axios.post(`${BASE_URL}/updateUserPassword`, data, { successMsgType: msgType.msg })
 }

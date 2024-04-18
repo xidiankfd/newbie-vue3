@@ -20,7 +20,7 @@ const methods = {
       return
     await formEl.validate(async (valid) => {
       if (valid) {
-        const { ok } = await updateUserPassword(props.row.userId, state.form.newPassword, state.form.confirmPassword)
+        const { ok } = await updateUserPassword(props.row.id, state.form.newPassword, state.form.confirmPassword)
         if (ok)
           value.value = false
       }

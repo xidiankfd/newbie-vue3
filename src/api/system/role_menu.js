@@ -19,7 +19,7 @@ export function removeAndSaveByRoleId(roleId, menuIds, successInfo = true) {
 
 /**
  * 根据角色ID获取权限关系列表
- * @param {Number} roleId 角色ID
+ * @param {*} roleId 角色ID
  * @returns {Promise}
  */
 export function listByRoleId(roleId) {

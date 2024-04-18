@@ -117,7 +117,10 @@ onMounted(() => {
         </el-col>
         <el-col v-if="!state.isUpdate" :span="12">
           <el-form-item label="登录密码" prop="password" class="w-full">
-            <el-input v-model="state.formData.password" placeholder="请输入登录密码" maxlength="30" />
+            <el-input
+              v-model="state.formData.password"
+              show-password type="password" placeholder="请输入登录密码" maxlength="30"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
