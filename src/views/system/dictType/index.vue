@@ -7,6 +7,7 @@ import { deleteBatchApi, getDictTypePagingApi } from '@/api/system/dictType'
 import usePagingParams from '@/hooks/usePagingParams.js'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
+import router from '@/router'
 
 defineOptions({
   name: 'DictType',
@@ -124,6 +125,9 @@ onMounted(() => {
             </el-button>
             <el-button type="danger" :icon="Minus" @click="methods.batchDel(null)">
               删除
+            </el-button>
+            <el-button type="primary" plain @click="router.push({ name: 'DictData' })">
+              字典数据
             </el-button>
           </div>
           <div>

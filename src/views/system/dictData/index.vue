@@ -107,7 +107,6 @@ const methods = {
 onMounted(() => {
   methods.getCommonStatusDict()
   methods.getEleTypeDict()
-  // methods.queryData()
 })
 </script>
 
