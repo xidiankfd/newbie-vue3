@@ -146,7 +146,7 @@ onMounted(() => {
           </el-table-column>
           <el-table-column prop="routePath" label="路由地址" show-overflow-tooltip align="left" header-align="center" min-width="200px" />
           <el-table-column prop="component" label="组件路径" show-overflow-tooltip align="left" header-align="center" min-width="200px" />
-          <el-table-column prop="perm" label="权限标识" align="left" header-align="center" min-width="120px" />
+          <el-table-column prop="perm" label="权限标识" align="left" header-align="center" min-width="200px" />
 
           <el-table-column label="状态" width="90" align="center" header-align="center">
             <template #default="{ row }">

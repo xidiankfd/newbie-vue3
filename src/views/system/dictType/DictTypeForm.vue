@@ -11,6 +11,7 @@ const emit = defineEmits(['onSaveSuccess', 'update:modelValue'])
 const formRef = ref()
 /** 定义响应式变量 */
 const state = reactive({
+  saveLoading: false,
   menuTreeLoading: false,
   menuTree: [],
   form: {
@@ -47,7 +48,9 @@ const methods = {
       return
     await formEl.validate(async (valid) => {
       if (valid) {
+        state.saveLoading = true
         const { ok } = await saveDictTypeApi(state.form)
+        state.saveLoading = false
         ok && emit('onSaveSuccess')
       }
     })
@@ -101,7 +104,7 @@ onMounted(() => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="primary" @click="methods.submit(formRef)">
+      <el-button type="primary" :loading="state.saveLoading" @click="methods.submit(formRef)">
         提交
       </el-button>
       <el-button @click="methods.resetForm(formRef)">

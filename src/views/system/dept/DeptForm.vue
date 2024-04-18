@@ -67,15 +67,13 @@ const methods = {
   async onSubmitClick(formEl) {
     if (!formEl)
       return
-    state.submitLoading = true
+
     await formEl.validate(async (valid) => {
       if (valid) {
+        state.submitLoading = true
         const { ok } = await saveDeptApi(state.form)
+        state.submitLoading = false
         ok && emit('saveSuccess')
-        state.submitLoading = false
-      }
-      else {
-        state.submitLoading = false
       }
     })
   },

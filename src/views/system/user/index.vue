@@ -43,7 +43,11 @@ const methods = {
   // 初始化部门数据
   async initDeptTree() {
     state.deptLoading = true
-    const { data } = await getDeptTreeApi()
+    const { ok, data } = await getDeptTreeApi()
+    if (!ok) {
+      state.deptLoading = false
+      return
+    }
     state.rawDeptTree = data
     state.deptTree = [
       {
@@ -59,7 +63,7 @@ const methods = {
     state.queryLoading = true
     const { ok, data } = await getUserPaging(current.value, size.value, state.queryForm)
     state.tableData = ok ? data.records : []
-    state.total = data.total
+    state.total = ok ? data.total : 0
     state.queryLoading = false
   },
   async batchDel(id) {

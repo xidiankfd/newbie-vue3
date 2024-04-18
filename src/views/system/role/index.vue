@@ -37,7 +37,7 @@ const methods = {
     state.queryLoading = true
     const { ok, data } = await getRolePaging({ ...state.form, page: current.value, size: size.value })
     state.tableData = ok ? data.records : []
-    state.total = data.total
+    state.total = ok ? data.total : 0
 
     state.queryLoading = false
   },

@@ -39,9 +39,8 @@ const methods = {
   async queryData() {
     state.queryLoading = true
     const { ok, data } = await getDictDataPagingApi(current.value, size.value, state.form)
-    if (ok)
-      state.tableData = data.records
-    state.total = data.total
+    state.tableData = ok ? data.records : []
+    state.total = ok ? data.total : 0
     state.queryLoading = false
   },
   refreshQuery(formEl) {

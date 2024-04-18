@@ -10,6 +10,7 @@ const emit = defineEmits(['onSaveSuccess'])
 const formRef = ref()
 /** 定义响应式变量 */
 const state = reactive({
+  loading: false,
   form: {
     roleName: '',
     roleCode: '',
@@ -33,7 +34,9 @@ const methods = {
       return
     await formEl.validate(async (valid) => {
       if (valid) {
+        state.loading = true
         const { ok } = await saveRoleApi(state.form)
+        state.loading = false
         ok && emit('onSaveSuccess')
       }
     })
@@ -79,7 +82,6 @@ onMounted(() => {
       <el-form-item label="排序" prop="sort">
         <el-input-number
           v-model="state.form.sort"
-          controls-position="right"
           :value-on-clear="1"
         />
       </el-form-item>
@@ -88,7 +90,7 @@ onMounted(() => {
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="primary" @click="methods.submit(formRef)">
+      <el-button type="primary" :loading="state.loading" @click="methods.submit(formRef)">
         提交
       </el-button>
       <el-button @click="methods.resetForm(formRef)">
