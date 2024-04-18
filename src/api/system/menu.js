@@ -13,22 +13,20 @@ export function getMenuTreeApi(params) {
 /**
  * 保存菜单信息，有菜单id则修改，否则新增
  * @param {*} data 菜单数据
- * @param {*} successInfo 是否回显成功消息提示
  * @returns {Promise}
  */
-export function saveMenuApi(data, successInfo = true) {
+export function saveMenuApi(data) {
   if (data.id || data.id === 0)
-    return axios.post(`${BASE_URL}/update`, data, { successMsgType: successInfo ? msgType.msg : msgType.none })
+    return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
   else
-    return axios.post(`${BASE_URL}/add`, data, { successMsgType: successInfo ? msgType.msg : msgType.none })
+    return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })
 }
 
 /**
- * 根据菜单id列表批量删除菜单数据并删除角色权限关系
+ * 批量删除
  * @param {*} menuIds 菜单id列表
- * @param {*} successInfo 是否回显成功消息提示
  * @returns {Promise}
  */
-export function deleteMenuBatchApi(menuIds, successInfo = true) {
-  return axios.post(`${BASE_URL}/delete`, menuIds, { successMsgType: successInfo ? msgType.msg : msgType.none })
+export function deleteBatchApi(menuIds) {
+  return axios.post(`${BASE_URL}/deleteBatch`, menuIds, { successMsgType: msgType.msg })
 }

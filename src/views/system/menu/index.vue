@@ -1,9 +1,10 @@
 <script setup name="Menu">
 import { onMounted, reactive, ref } from 'vue'
-import { Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
+import { Minus, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import useCutTree from 'cut-tree'
+import { ElMessageBox } from 'element-plus'
 import MenuForm from './MenuForm.vue'
-import { deleteMenuBatchApi, getMenuTreeApi } from '@/api/system/menu'
+import { deleteBatchApi, getMenuTreeApi } from '@/api/system/menu'
 import SvgIcon from '@/components/svg-icon/index.vue'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
@@ -40,27 +41,25 @@ const methods = {
     forEach(state.tableData, row => tableRef.value.toggleRowExpansion(row, !state.tableIsExpansionAll))
     state.tableIsExpansionAll = !state.tableIsExpansionAll
   },
-  recursionGetMenuIds(menus, menuIds) {
-    menus.forEach((menu) => {
-      menuIds.push(menu.id)
-      if (menu.children && menu.children.length)
-        methods.recursionGetMenuIds(menu.children, menuIds)
-    })
-  },
-  del(row) {
-    const menuIds = []
-    if (row.children && row.children.length) {
-      menuIds.push(row.id)
-      methods.recursionGetMenuIds(row.children, menuIds)
+  async delBatch(id) {
+    if (id || id === 0) {
+      const { ok } = await deleteBatchApi([id])
+      ok && methods.queryData()
     }
     else {
-      menuIds.push(row.id)
+      const ids = tableRef.value.getSelectionRows().map(item => item.id)
+      ElMessageBox.confirm('确认删除选中数据吗?',
+        '注意',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        .then(async () => {
+          const { ok } = await deleteBatchApi(ids)
+          ok && methods.queryData()
+        })
     }
-    methods.delBatch(menuIds)
-  },
-  async delBatch(menuIds) {
-    const { ok } = await deleteMenuBatchApi(menuIds)
-    ok && methods.queryData()
   },
   openMenuForm(row) {
     state.currentRow = row
@@ -113,6 +112,9 @@ onMounted(() => {
             <el-button v-hasPerm="'sys:menu:add'" type="primary" :icon="Plus" @click="methods.openMenuForm({})">
               新增
             </el-button>
+            <el-button type="danger" :icon="Minus" @click="methods.delBatch(null)">
+              删除
+            </el-button>
             <el-button :icon="Sort" @click="methods.expansionTable">
               {{ state.tableIsExpansionAll ? '合并所有' : '展开所有' }}
             </el-button>
@@ -125,6 +127,7 @@ onMounted(() => {
           ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="id"
           height="calc(100vh - 300px)" default-expand-all
         >
+          <el-table-column type="selection" width="55" />
           <el-table-column prop="title" label="标题" width="180" fixed="left" align="left" header-align="center" />
           <el-table-column prop="icon" label="图标" width="70" align="center" header-align="center">
             <template #default="{ row }">
@@ -164,7 +167,7 @@ onMounted(() => {
               <el-button v-hasPerm="'sys:menu:edit'" type="warning" link @click="methods.openMenuForm(row)">
                 编辑
               </el-button>
-              <el-popconfirm :title="`确认要删除【${row.title}】吗？`" @confirm="methods.del(row)">
+              <el-popconfirm :title="`确认要删除【${row.title}】吗？`" @confirm="methods.delBatch(row.id)">
                 <template #reference>
                   <el-button v-hasPerm="'sys:menu:del'" type="danger" link>
                     删除
