@@ -14,7 +14,8 @@ export const useUserStore = defineStore('user', () => {
   const userInfo = shallowRef()
 
   // 登录
-  async function login(form, replacePath = '/') {
+  async function login(form) {
+    const replacePath = router.currentRoute.value.query.replace || '/'
     const { data, ok } = await loginApi(form)
     if (!ok)
       return

@@ -50,7 +50,7 @@ const toolsMaxWidth = computed(() => {
   <div class="h-full flex items-center">
     <div ref="moreRef" class="h-full flex items-center tools justify-end" :style="{ maxWidth: toolsMaxWidth }" @mouseleave="onMouseover(false)">
       <NavSearch :size="size" />
-      <Locale :size="size" />
+      <!-- <Locale :size="size" /> -->
       <Dark :size="size" />
       <FullScreen :size="size" />
       <ElSize :size="size" />

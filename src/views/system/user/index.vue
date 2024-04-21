@@ -1,7 +1,7 @@
 <script setup name="User">
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import UserForm from './UserForm.vue'
 import UpdateUserPassword from './UpdateUserPassword.vue'
 import { deleteBatchApi, getUserPaging } from '@/api/system/user'
@@ -100,15 +100,11 @@ const methods = {
     const { ok, data } = await getDictDataListByTypeCodeApi('userStatus')
     if (ok)
       state.userStatusList = data
-    else
-      ElMessage.error('用户状态字典查询失败')
   },
   async getUserGenderDict() {
     const { ok, data } = await getDictDataListByTypeCodeApi('userGender')
     if (ok)
       state.userGenderList = data
-    else
-      ElMessage.error('用户性别字典查询失败')
   },
 }
 onMounted(() => {

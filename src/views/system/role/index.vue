@@ -1,7 +1,7 @@
 <script setup name="Role">
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import RoleForm from './RoleForm.vue'
 import PermissionAllocation from './PermissionAllocation.vue'
 import UserAllocation from './UserAllocation.vue'
@@ -88,9 +88,6 @@ const methods = {
     const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
     if (ok)
       state.commonStatusList = data
-
-    else
-      ElMessage.error('获取通用状态字典数据失败')
   },
 }
 onMounted(() => {

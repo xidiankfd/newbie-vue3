@@ -79,6 +79,7 @@ axiosInstance.interceptors.response.use((res) => {
 }, (err) => {
   if (!err.response) {
     ElMessage.error(err.message)
+    FiveNProgress.done()
     return Promise.reject(err)
   }
 
