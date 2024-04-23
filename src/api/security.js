@@ -1,5 +1,10 @@
 import axios, { msgType } from '@/utils/axios'
 
+// 图片验证码
+export function imageCaptchaApi() {
+  return axios.get('/security/imageCaptcha')
+}
+
 // 登录
 export function loginApi(data) {
   return axios.post('/security/login', data, { errorMsgType: msgType.box })

@@ -2,6 +2,8 @@
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import { Lock, User } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/modules/user'
+import SvgIcon from '@/components/svg-icon/index.vue'
+import { imageCaptchaApi } from '@/api/security'
 
 const userStore = useUserStore()
 const formRef = ref()
@@ -20,18 +22,36 @@ const rules = {
       trigger: 'blur',
     },
   ],
+  checkCode: [
+    {
+      required: true,
+      message: '请输入验证码',
+      trigger: 'blur',
+    },
+  ],
 }
 
 const state = reactive({
+  captchaImage: '', // 验证码图片
+  captchaLoading: false,
   loginLoading: false,
   rememberMe: false,
   form: {
     username: 'admin',
     password: '123456',
+    checkCode: '',
+    checkCodeKey: '',
     tokenTimeout: null,
   },
 })
 const methods = {
+  async getCaptchaImage() {
+    state.captchaLoading = true
+    const res = await imageCaptchaApi()
+    state.captchaImage = res.data.imageBase64
+    state.form.checkCodeKey = res.data.checkCodeKey
+    state.captchaLoading = false
+  },
   async onSubmit(formEl) {
     if (!formEl)
       return
@@ -40,7 +60,6 @@ const methods = {
         state.loginLoading = true
         if (state.rememberMe)
           state.form.tokenTimeout = 604800 // 7天
-
         try {
           await userStore.login({ ...state.form })
         }
@@ -63,6 +82,7 @@ const methods = {
   },
 }
 onMounted(() => {
+  methods.getCaptchaImage()
   document.addEventListener('keyup', methods.enterKey)
 })
 onUnmounted(() => {
@@ -78,8 +98,25 @@ onUnmounted(() => {
     <el-form-item prop="password">
       <el-input v-model="state.form.password" style="width: 230px;" :prefix-icon="Lock" type="password" show-password placeholder="密码" />
     </el-form-item>
+    <el-form-item prop="checkCode">
+      <div class="flex items-center">
+        <el-input v-model="state.form.checkCode" style="width: 130px;" placeholder="验证码">
+          <template #prefix>
+            <el-icon>
+              <SvgIcon name="MaterialSymbolsShieldLockedOutlineRounded" />
+            </el-icon>
+          </template>
+        </el-input>
+        <div v-loading="state.captchaLoading">
+          <img
+            :src="state.captchaImage" class="w-[100px] h-[30px] cursor-pointer"
+            @click="methods.getCaptchaImage"
+          >
+        </div>
+      </div>
+    </el-form-item>
     <el-form-item>
-      <el-checkbox v-model="state.rememberMe" label="7天免登录" />
+      <el-checkbox id="rememberMe" v-model="state.rememberMe" label="7天免登录" />
     </el-form-item>
     <el-form-item>
       <el-button class="w-full" type="primary" :loading="state.loginLoading" @click="methods.onSubmit(formRef)">
