@@ -1,4 +1,4 @@
-<script setup name="User">
+<script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
@@ -11,6 +11,9 @@ import usePagingParams from '@/hooks/usePagingParams'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
+defineOptions({
+  name: 'SysUser',
+})
 const appStore = useAppStore()
 const { current, size } = usePagingParams()
 const tableRef = ref()

@@ -14,7 +14,7 @@ import usePagingParams from '@/hooks/usePagingParams.js'
 import { useAppStore } from '@/stores/modules/app'
 
 defineOptions({
-  name: 'DictData',
+  name: 'SysDictData',
 })
 const appStore = useAppStore()
 const { current, size } = usePagingParams()

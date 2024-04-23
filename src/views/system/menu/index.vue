@@ -1,4 +1,4 @@
-<script setup name="Menu">
+<script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import useCutTree from 'cut-tree'
@@ -9,6 +9,9 @@ import SvgIcon from '@/components/svg-icon/index.vue'
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
+defineOptions({
+  name: 'SysMenu',
+})
 const tableRef = ref()
 const appStore = useAppStore()
 const queryFormRef = ref()

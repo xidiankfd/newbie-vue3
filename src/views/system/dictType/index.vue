@@ -10,7 +10,7 @@ import { useAppStore } from '@/stores/modules/app'
 import router from '@/router'
 
 defineOptions({
-  name: 'DictType',
+  name: 'SysDeptType',
 })
 const appStore = useAppStore()
 const { current, size } = usePagingParams()

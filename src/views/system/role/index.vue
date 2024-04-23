@@ -1,4 +1,4 @@
-<script setup name="Role">
+<script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
@@ -11,7 +11,7 @@ import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
 defineOptions({
-  name: 'Role',
+  name: 'SysRole',
 })
 const appStore = useAppStore()
 const { current, size } = usePagingParams()

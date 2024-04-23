@@ -1,4 +1,4 @@
-<script setup name="Dept">
+<script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import useCutTree from 'cut-tree'
@@ -9,7 +9,7 @@ import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
 defineOptions({
-  name: 'Dept',
+  name: 'SysDept',
 })
 const appStore = useAppStore()
 const tableRef = ref()
