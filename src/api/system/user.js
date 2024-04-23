@@ -37,16 +37,8 @@ export function deleteBatchApi(ids) {
 
 /**
  * 修改用户密码
- * @param {Number} userId
- * @param {String} newPassword
- * @param {String} confirmPassword
  * @returns {Promise}
  */
-export function updateUserPassword(userId, newPassword, confirmPassword) {
-  const data = {
-    userId,
-    newPassword,
-    confirmPassword,
-  }
+export function updateUserPassword(data) {
   return axios.post(`${BASE_URL}/updateUserPassword`, data, { successMsgType: msgType.msg })
 }

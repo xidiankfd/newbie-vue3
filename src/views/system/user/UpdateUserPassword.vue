@@ -12,6 +12,7 @@ const state = reactive({
     oldPassword: '',
     newPassword: '',
     confirmPassword: '',
+    immediatelyKick: true,
   },
 })
 const methods = {
@@ -20,7 +21,11 @@ const methods = {
       return
     await formEl.validate(async (valid) => {
       if (valid) {
-        const { ok } = await updateUserPassword(props.row.id, state.form.newPassword, state.form.confirmPassword)
+        const data = {
+          ...state.form,
+          userId: props.row.id,
+        }
+        const { ok } = await updateUserPassword(data)
         if (ok)
           value.value = false
       }
@@ -61,6 +66,9 @@ const rules = {
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
         <el-input v-model="state.form.confirmPassword" type="password" show-password />
+      </el-form-item>
+      <el-form-item label="" prop="immediatelyKick">
+        <el-checkbox v-model="state.form.immediatelyKick" label="修改成功后强制下线" />
       </el-form-item>
     </el-form>
 
