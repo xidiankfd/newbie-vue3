@@ -24,9 +24,9 @@ export function logoutApi() {
 }
 // 初始化管理员
 export function initAdmin(data) {
-  return axios.post('/security/initAdmin', data, { errorMsgType: msgType.msg })
+  return axios.post('/security/initAdmin', data, { successMsgType: msgType.msg })
 }
 // 修改密码
 export function updatePassword(data) {
-  return axios.post('/security/updatePassword', data, { errorMsgType: msgType.msg })
+  return axios.post('/security/updatePassword', data, { successMsgType: msgType.msg })
 }

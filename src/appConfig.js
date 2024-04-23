@@ -145,4 +145,9 @@ export default {
    * always | never | hover
    */
   elChardShadow: 'never',
+
+  /**
+   * 是否启用初始化系统管理员
+   */
+  enableAdminInit: false,
 }

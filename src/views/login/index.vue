@@ -1,5 +1,9 @@
 <script setup>
 import Login from './Login.vue'
+import AdminInit from './AdminInit.vue'
+import { useAppStore } from '@/stores/modules/app'
+
+const appStore = useAppStore()
 </script>
 
 <template>
@@ -7,6 +11,7 @@ import Login from './Login.vue'
     <p class="login-title">
       NewbieBoot 企业级快速开发平台
     </p>
+    <AdminInit v-if="appStore.appConfig.enableAdminInit" class=" absolute top-0 right-0" />
     <div class="form-card">
       <img src="@/assets/images/pages/login/计划机器人.png" style="background-color: #d6e0f5;width: 60%;height: 100%;">
       <div class="card-login ">
@@ -22,6 +27,7 @@ import Login from './Login.vue'
             邮箱登录
           </el-button>
         </div>
+
         <el-divider>
           <template #default>
             <span style="font-size: 12px;">第三方登录</span>
