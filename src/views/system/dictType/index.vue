@@ -123,7 +123,7 @@ onMounted(() => {
             <el-button v-hasPerm="'sys.dict.type.del'" type="danger" :icon="Minus" @click="methods.batchDel(null)">
               删除
             </el-button>
-            <el-button v-hasPerm="'sys.dict.data'" type="primary" plain @click="router.push({ name: 'DictData' })">
+            <el-button v-hasPerm="'sys.dict.data'" type="primary" plain @click="router.push({ name: 'SysDictData' })">
               字典数据
             </el-button>
           </div>
