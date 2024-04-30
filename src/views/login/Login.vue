@@ -71,7 +71,9 @@ const methods = {
         if (state.rememberMe)
           state.form.tokenTimeout = 604800 // 7天
         try {
-          await userStore.login({ ...state.form })
+          const res = await userStore.login({ ...state.form })
+          if (res && res.msg === '验证码已失效')
+            methods.getCaptchaImage()
         }
         catch (error) {
 

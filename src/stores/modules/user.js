@@ -16,14 +16,14 @@ export const useUserStore = defineStore('user', () => {
   // 登录
   async function login(form) {
     const replacePath = router.currentRoute.value.query.replace || '/'
-    const { data, ok } = await loginApi(form)
-    if (!ok)
-      return
-    tokenInfo.value = data
+    const res = await loginApi(form)
+    if (!res.ok)
+      return res
+    tokenInfo.value = res.data
     await router.replace(replacePath)
     ElNotification({
       title: t('app.loginSuccess'),
-      message: `${t('app.welcome')} ${data?.nickName || ''}`,
+      message: `${t('app.welcome')} ${res.data?.nickName || ''}`,
       type: 'success',
     })
   }
