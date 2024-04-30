@@ -13,7 +13,10 @@ const appStore = useAppStore()
     </p>
     <AdminInit v-if="appStore.appConfig.enableAdminInit" class=" absolute top-0 right-0" />
     <div class="form-card">
-      <img src="@/assets/images/pages/login/计划机器人.png" style="background-color: #d6e0f5;width: 60%;height: 100%;">
+      <img
+        src="@/assets/images/pages/login/计划机器人.png"
+        class="logo-left-img"
+      >
       <div class="card-login ">
         <p style="font-size: 20px;font-weight: 600; margin-bottom: 20px;display: flex;justify-content: center;">
           <span>登录</span>
@@ -53,18 +56,22 @@ const appStore = useAppStore()
 </template>
 
 <style scoped>
-.login-title{
+.login-title {
   font-size: 24px;
   font-weight: 600;
-  margin: -100px 0 100px 0 ;
-
-  color: #3555e0;
+  /* margin: -100px 0 100px 0; */
+  color: #041b99;
+  position: absolute;
+  left: 10px;
+  top: 10px;
 }
-.login-footer{
+
+.login-footer {
   position: absolute;
   bottom: 10px;
   color: #494949;
 }
+
 .card-login {
   width: 40%;
   padding: 10px;
@@ -82,11 +89,15 @@ const appStore = useAppStore()
   overflow: hidden;
   display: flex;
 }
-
+.logo-left-img{
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(110deg,#d6e0f5 85%, #fff 50%);
+}
 .long-page {
   width: 100%;
   height: 100vh;
-  background-color: #d6e0f5;
+  background: linear-gradient(110deg,#d6e0f5 54%, #fff 50%);
   display: flex;
   justify-content: center;
   align-items: center;

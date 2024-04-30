@@ -5,7 +5,7 @@ import useAuth from '@/hooks/useAuth'
 import { download, downloadBlobFile, getFileDownloadUrl, remove, upload } from '@/api/file'
 
 const { tokenInfo } = useAuth()
-const filePath = 'public/2024/04/30/wallhaven-7pmkj35905.png'
+const filePath = 'public/2024/04/30/wallhaven-7pmkj30394.png'
 const fileList = ref([])
 
 async function handleRemove(file, uploadFiles) {
