@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash'
 import { notFound } from '@/router/base'
 
 const { sort, foreach, forEach, listToTree } = useCutTree({ id: 'path', children: 'children', parentId: 'parentPath' })
+const allViews = import.meta.glob('/src/views/**/*.vue')
 
 /**
  * 菜单排序
@@ -103,7 +104,7 @@ function isIframe(route) {
  */
 function handleComponent(route, hasRole) {
   if (route.meta?.roles && hasRole && !hasRole(route.meta.roles)) {
-    route.component = () => import('/src/views/error-page/NotPermission.vue')
+    route.component = () => import('@/views/error-page/NotPermission.vue')
     route.meta.hide = true
     route.meta.title = '无权限'
   }
@@ -114,7 +115,8 @@ function handleComponent(route, hasRole) {
     const url = route.component.endsWith('.vue')
       ? `/src/views/${route.component}`
       : `/src/views/${route.component}.vue`
-    route.component = () => import(/* @vite-ignore */url)
+    // route.component = () => import(/* @vite-ignore */ url)
+    route.component = allViews[url]
   }
 }
 
