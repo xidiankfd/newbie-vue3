@@ -47,10 +47,20 @@ const state = reactive({
 const methods = {
   async getCaptchaImage() {
     state.captchaLoading = true
-    const res = await imageCaptchaApi()
-    state.captchaImage = res.data.imageBase64
-    state.form.checkCodeKey = res.data.checkCodeKey
-    state.captchaLoading = false
+    const params = {
+      key: state.form.checkCodeKey,
+    }
+    try {
+      const res = await imageCaptchaApi(params)
+      state.captchaImage = res.data.imageBase64
+      state.form.checkCodeKey = res.data.checkCodeKey
+    }
+    catch (error) {
+
+    }
+    finally {
+      state.captchaLoading = false
+    }
   },
   async onSubmit(formEl) {
     if (!formEl)

@@ -34,14 +34,18 @@ export const msgType = {
 
 // 请求拦截器
 axiosInstance.interceptors.request.use((config) => {
-  const { tokenInfo } = useAuth()
   FiveNProgress.start() // 请求进度条开始
   // 请求头携带token
+  const { tokenInfo } = useAuth()
   if (tokenInfo)
     config.headers[tokenInfo.tokenName] = tokenInfo.tokenValue
 
   // 添加时间戳参数
   config.url = `${config.url}?_t=${new Date().getTime()}`
+
+  // 默认的错误消息提示类型
+  if (!config.errorMsgType)
+    config.errorMsgType = 'msg'
 
   return config
 }, (error) => {
@@ -51,6 +55,16 @@ axiosInstance.interceptors.request.use((config) => {
 
 // 响应拦截器
 axiosInstance.interceptors.response.use((res) => {
+  if (typeof res.data != 'object' || res.data instanceof Blob) {
+    FiveNProgress.done()
+    return res
+  }
+  // 响应文件流的情况
+  if (res.status === 200 && res.headers['content-type'] === 'application/octet-stream') {
+    FiveNProgress.done()
+    return res
+  }
+
   const routeStore = useRouteStore()
   const userStore = useUserStore()
   const { setTokenInfo } = useAuth()
@@ -60,7 +74,8 @@ axiosInstance.interceptors.response.use((res) => {
   const code = data[resultProp.code]
   // 业务异常响应时
   if (code !== successCode) {
-    errorMessage(data[resultProp.message] || t('http.error'), errorMsgType)
+    if (errorMsgType && errorMsgType !== 'none')
+      errorMessage(data[resultProp.message] || t('http.error'), errorMsgType)
     switch (code) {
       case 401:
         setTokenInfo(null)
@@ -72,7 +87,8 @@ axiosInstance.interceptors.response.use((res) => {
   }
   // 正常响应时
   else {
-    successMessage(data[resultProp.message] || t('http.success'), successMsgType)
+    if (successMsgType && successMsgType !== 'none')
+      successMessage(data[resultProp.message] || t('http.success'), successMsgType)
   }
   FiveNProgress.done() // 请求进度条结束
   return data
@@ -115,7 +131,7 @@ axiosInstance.interceptors.response.use((res) => {
 
 // 错误消息处理
 function errorMessage(message, messageType) {
-  if (!messageType || !Object.keys(msgType).includes(messageType) || messageType === msgType.msg) {
+  if (messageType === msgType.msg) {
     ElMessage.error(message)
   }
   else if (messageType === msgType.box) {
@@ -135,10 +151,10 @@ function errorMessage(message, messageType) {
 
 // 成功消息处理
 function successMessage(message, messageType) {
-  if (messageType && messageType === msgType.msg) {
+  if (messageType === msgType.msg) {
     ElMessage.success(message)
   }
-  else if (messageType && messageType === msgType.box) {
+  else if (messageType === msgType.box) {
     ElMessageBox.confirm(
       message,
       t('messageBox.hint'),
@@ -152,5 +168,4 @@ function successMessage(message, messageType) {
     )
   }
 }
-
 export default axiosInstance

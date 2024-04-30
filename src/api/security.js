@@ -1,8 +1,8 @@
 import axios, { msgType } from '@/utils/axios'
 
 // 图片验证码
-export function imageCaptchaApi() {
-  return axios.get('/security/imageCaptcha')
+export function imageCaptchaApi(params) {
+  return axios.get('/security/imageCaptcha', { params })
 }
 
 // 登录
