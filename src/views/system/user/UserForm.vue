@@ -143,7 +143,7 @@ onMounted(() => {
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="默认首页" prop="homePath" class="w-full">
+          <el-form-item label="首页地址" prop="homePath" class="w-full">
             <el-input v-model="state.formData.homePath" placeholder="请输入路由地址" />
           </el-form-item>
         </el-col>

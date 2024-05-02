@@ -74,11 +74,21 @@ function getMenus(routes, hasRole) {
 
 /**
  * 获取 homePath
+ * 优先级 用户>角色>系统默认
  * @param {*} userInfo 用户信息
  * @returns
  */
 function getHomePath(userInfo) {
-  return userInfo?.homePath || import.meta.env.VITE_APP_HOME_PATH
+  if (!userInfo)
+    return import.meta.env.VITE_APP_HOME_PATH
+  if (userInfo.homePath)
+    return userInfo.homePath
+  if (userInfo.roleList?.length) {
+    const role = userInfo.roleList.find(item => !!item.homePath)
+    if (role)
+      return role.homePath
+  }
+  return import.meta.env.VITE_APP_HOME_PATH
 }
 /**
  * 判断路由是否为外链内嵌路由

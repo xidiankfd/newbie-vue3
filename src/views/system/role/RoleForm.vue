@@ -14,6 +14,7 @@ const state = reactive({
   form: {
     roleName: '',
     roleCode: '',
+    homePath: '',
     sort: 1,
     status: '1',
     remark: '',
@@ -75,6 +76,9 @@ onMounted(() => {
       </el-form-item>
       <el-form-item label="角色编码" prop="roleCode">
         <el-input v-model="state.form.roleCode" placeholder="角色编码" />
+      </el-form-item>
+      <el-form-item label="首页地址" prop="homePath">
+        <el-input v-model="state.form.homePath" placeholder="请输入路由地址" />
       </el-form-item>
       <el-form-item label="描述" prop="remark">
         <el-input v-model="state.form.remark" type="textarea" placeholder="描述" :maxlength="120" show-word-limit :rows="4" />
