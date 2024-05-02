@@ -28,9 +28,9 @@ export const useUserStore = defineStore('user', () => {
     })
   }
   // 登出
-  async function logout() {
+  async function logout(skip = false) {
     try {
-      await logoutApi()
+      !skip && await logoutApi()
     }
     finally {
       const routeStore = useRouteStore()

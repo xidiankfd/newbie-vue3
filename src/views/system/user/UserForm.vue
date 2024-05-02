@@ -38,6 +38,7 @@ const state = reactive({
     password: '',
     nickName: props.row.nickName || '',
     phone: props.row.phone || '',
+    homePath: props.row.homePath || '',
     email: props.row.email || '',
     gender: props.row.gender || props.userGenderList.find(item => item.def === 'Y')?.value,
     status: props.row.status || '1',
@@ -110,9 +111,9 @@ onMounted(() => {
   <el-dialog v-model="showDialog" width="700px" :title="dialogTitle" append-to-body>
     <el-form ref="formRef" :model="state.formData" :rules="rules" label-width="100px">
       <el-row>
-        <el-col v-if="!state.isUpdate" :span="12">
+        <el-col :span="12">
           <el-form-item label="用户名" prop="username" class="w-full">
-            <el-input v-model="state.formData.username" placeholder="请输入用户名" maxlength="15" />
+            <el-input v-model="state.formData.username" :disabled="state.isUpdate" placeholder="请输入用户名" maxlength="15" />
           </el-form-item>
         </el-col>
         <el-col v-if="!state.isUpdate" :span="12">
@@ -139,6 +140,11 @@ onMounted(() => {
         <el-col :span="12">
           <el-form-item label="手机号码" prop="phone" class="w-full">
             <el-input v-model="state.formData.phone" placeholder="请输入手机号码" maxlength="11" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="默认首页" prop="homePath" class="w-full">
+            <el-input v-model="state.formData.homePath" placeholder="请输入路由地址" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
