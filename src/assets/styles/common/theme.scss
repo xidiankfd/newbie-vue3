@@ -248,3 +248,18 @@ html.fantasy {
     --fv-footer-text-color: #1e1e36; // 页脚文本颜色
     --fv-footer-border-top: 0; // 页脚上边框
 }
+html.vs{
+    --fv-bg:linear-gradient(150deg, #ebf3ff 45%,  #ffebf5 0%); // 全背景（包括顶栏、侧栏、多标签页、主界面、页脚，需要将其它背景设置为 transparent）
+    --fv-tabs-bg: transparent; // tabs 背景颜色
+    --fv-main-page-bg: transparent; // 主界面背景颜色
+    --fv-header-bg: transparent; // 顶栏背景颜色
+    --fv-main-menu-bg: transparent; // 背景颜色
+    --fv-sub-menu-bg: transparent; // 背景颜色
+    --fv-sub-menu-inline-bg: transparent; // 子菜单展开背景颜色
+    --fv-logo-bg: transparent; // LOGO背景
+    --fv-footer-bg: transparent; // 页脚背景颜色
+    // --el-fill-color-blank:transparent;
+    // --el-bg-color:transparent;
+    // --el-fill-color-lighter:transparent;
+    // --el-dialog-bg-color:#fff;
+}

@@ -59,6 +59,15 @@ const themeList = [
     headBackground: 'linear-gradient(45deg, #3b8d99, #6b6b83, #aa4b6b)',
     asideBackground: 'linear-gradient(90deg,#fffafc, #f7f7ff, #f7fdff)',
   },
+  {
+    title: '主题-幻想',
+    name: 'vs',
+    mainBackground: 'linear-gradient(150deg, #ebf3ff 45%,  #ffebf5 0%)',
+    headBackground: 'transparent',
+    asideBackground: 'transparent',
+    borderY: '#dcdfe6', // 纵边框
+    borderX: '#dcdfe6', // 横边框
+  },
 ]
 </script>
 
