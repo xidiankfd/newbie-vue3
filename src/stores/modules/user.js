@@ -36,7 +36,8 @@ export const useUserStore = defineStore('user', () => {
       const routeStore = useRouteStore()
       tokenInfo.value = null
       userInfo.value = null
-      await router.replace(`/login?replace=${router.currentRoute.value.fullPath}`)
+      if (router.currentRoute.value.path !== '/login')
+        await router.replace(`/login?replace=${router.currentRoute.value.path}`)
       routeStore.$reset()
     }
   }
