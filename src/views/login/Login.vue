@@ -35,7 +35,7 @@ const state = reactive({
   captchaImage: '', // 验证码图片
   captchaLoading: false,
   loginLoading: false,
-  rememberMe: false,
+  rememberMe: true,
   form: {
     username: 'admin',
     password: '123456',
