@@ -2,145 +2,136 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>%VITE_APP_TITLE%</title>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>%VITE_APP_TITLE%</title>
 
-    <style>
-      *{
-        margin: 0;
-        padding: 0;
+  <!-- loading样式 -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    #h3 {
+      color: rgb(82, 79, 79);
+    }
+
+    #ring {
+      width: 190px;
+      height: 190px;
+      border: 1px solid transparent;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    #ring:nth-child(1) {
+      border-bottom: 8px solid rgb(240, 42, 230);
+      animation: rotate1 2s linear infinite;
+    }
+
+    @keyframes rotate1 {
+      from {
+        transform: rotateX(50deg) rotateZ(110deg);
       }
-      .loading,
-      .loading>div {
-        position: relative;
-        box-sizing: border-box;
+
+      to {
+        transform: rotateX(50deg) rotateZ(470deg);
       }
-  
-      .loading {
-        display: block;
-        font-size: 0;
-        color: #0d8ddd;
+    }
+
+    #ring:nth-child(2) {
+      border-bottom: 8px solid rgb(240, 19, 67);
+      animation: rotate2 2s linear infinite;
+    }
+
+    @keyframes rotate2 {
+      from {
+        transform: rotateX(20deg) rotateY(50deg) rotateZ(20deg);
       }
-  
-      .loading.la-dark {
-        color: #333;
+
+      to {
+        transform: rotateX(20deg) rotateY(50deg) rotateZ(380deg);
       }
-  
-      .loading>div {
-        display: inline-block;
-        float: none;
-        background-color: currentColor;
-        border: 0 solid currentColor;
+    }
+
+    #ring:nth-child(3) {
+      border-bottom: 8px solid rgb(3, 170, 170);
+      animation: rotate3 2s linear infinite;
+    }
+
+    @keyframes rotate3 {
+      from {
+        transform: rotateX(40deg) rotateY(130deg) rotateZ(450deg);
       }
-  
-      .loading {
-        width: 120px;
-        height: 72px;
+
+      to {
+        transform: rotateX(40deg) rotateY(130deg) rotateZ(90deg);
       }
-  
-      .loading>div:nth-child(1) {
-        position: absolute;
-        bottom: 32%;
-        left: 18%;
-        width: 30px;
-        height: 30px;
-        border-radius: 100%;
-        transform-origin: center bottom;
-        animation: ball-climbing-dot-jump 0.6s ease-in-out infinite;
+    }
+
+    #ring:nth-child(4) {
+      border-bottom: 8px solid rgb(207, 135, 1);
+      animation: rotate4 2s linear infinite;
+    }
+
+    @keyframes rotate4 {
+      from {
+        transform: rotateX(70deg) rotateZ(270deg);
       }
-  
-      .loading>div:not(:nth-child(1)) {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 50px;
-        height: 2px;
-        border-radius: 0;
-        transform: translate(60%, 0);
-        animation: ball-climbing-dot-steps 1.8s linear infinite;
+
+      to {
+        transform: rotateX(70deg) rotateZ(630deg);
       }
-  
-      .loading>div:not(:nth-child(1)):nth-child(2) {
-        animation-delay: 0ms;
-      }
-  
-      .loading>div:not(:nth-child(1)):nth-child(3) {
-        animation-delay: -600ms;
-      }
-  
-      .loading>div:not(:nth-child(1)):nth-child(4) {
-        animation-delay: -1200ms;
-      }
-  
-      @keyframes ball-climbing-dot-jump {
-        0% {
-          transform: scale(1, 0.7);
-        }
-  
-        20% {
-          transform: scale(0.7, 1.2);
-        }
-  
-        40% {
-          transform: scale(1, 1);
-        }
-  
-        50% {
-          bottom: 125%;
-        }
-  
-        46% {
-          transform: scale(1, 1);
-        }
-  
-        80% {
-          transform: scale(0.7, 1.2);
-        }
-  
-        90% {
-          transform: scale(0.7, 1.2);
-        }
-  
-        100% {
-          transform: scale(1, 0.7);
-        }
-      }
-  
-      @keyframes ball-climbing-dot-steps {
-        0% {
-          top: 0;
-          right: 0;
-          opacity: 0;
-        }
-  
-        50% {
-          opacity: 1;
-        }
-  
-        100% {
-          top: 100%;
-          right: 100%;
-          opacity: 0;
-        }
-      }
-    </style>
-        
+    }
+
+    #title {
+      position: absolute;
+      top: 150px;
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(to bottom, #409eff, #b3d9ff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+  </style>
+  <!-- loading样式结束 -->
 </head>
 
 <body>
-    <div id="app">
-      <div style="width: 100vw;height: 100vh;display: flex;justify-content: center;align-items: center;">
-        <div class="loading">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+  <div id="app">
+    <!-- loading -->
+    <div style="width: 100vw;height: 100vh;display: flex;justify-content: center;align-items: center;">
+      <p id="title">
+        NewbieBoot
+      </p>
+      <div id="page">
+        <div id="container">
+          <div id="ring"></div>
+          <div id="ring"></div>
+          <div id="ring"></div>
+          <div id="ring"></div>
+          <div id="h3">loading</div>
         </div>
       </div>
     </div>
-    <script type="module" src="/src/main.js"></script>
+    <!-- loading结束 -->
+  </div>
+  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>
