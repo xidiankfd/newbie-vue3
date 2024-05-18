@@ -10,7 +10,7 @@ const BASE_URL = '/system/user'
  * @returns {Promise}
  */
 export function getUserPaging(current, size, params = {}) {
-  return axios.get(`${BASE_URL}/page`, { params: { current, size, ...params } })
+  return axios.get(`${BASE_URL}/paging`, { params: { current, size, ...params } })
 }
 
 /**

@@ -11,7 +11,7 @@ const BASE_URL = '/system/dict/type'
  */
 export function getDictTypePagingApi(current, size, params) {
   params = { current, size, ...params }
-  return axios.get(`${BASE_URL}/page`, { params })
+  return axios.get(`${BASE_URL}/paging`, { params })
 }
 
 /**

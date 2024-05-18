@@ -11,7 +11,7 @@ const BASE_URL = '/system/dict/data'
  */
 export function getDictDataPagingApi(current, size, params) {
   params = { current, size, ...params }
-  return axios.get(`${BASE_URL}/page`, { params })
+  return axios.get(`${BASE_URL}/paging`, { params })
 }
 
 /**

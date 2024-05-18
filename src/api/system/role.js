@@ -8,7 +8,7 @@ const BASE_URL = '/system/role'
  * @returns
  */
 export function getRolePaging(params) {
-  return axios.get(`${BASE_URL}/page`, { params })
+  return axios.get(`${BASE_URL}/paging`, { params })
 }
 
 /**
