@@ -15,7 +15,7 @@ defineOptions({
 const tableRef = ref()
 const appStore = useAppStore()
 const queryFormRef = ref()
-const { forEach } = useCutTree({ id: 'id' })
+const { forEach } = useCutTree({ id: 'id', parentId: 'parentId', children: 'children' })
 const state = reactive({
   commonStatusList: [],
   currentRow: {},

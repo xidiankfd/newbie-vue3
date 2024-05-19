@@ -14,7 +14,7 @@ defineOptions({
 const appStore = useAppStore()
 const tableRef = ref()
 const queryFormRef = ref()
-const { forEach } = useCutTree({ id: 'menuId' })
+const { forEach } = useCutTree({ id: 'id', children: 'children' })
 /** 定义响应式数据 */
 const state = reactive({
   commonStatusList: [],

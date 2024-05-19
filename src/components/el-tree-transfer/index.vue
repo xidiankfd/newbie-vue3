@@ -60,7 +60,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const { treeToList, listToTree, forEach } = useCutTree({ id: props.treeProps.id, pid: props.treeProps.pid, children: props.treeProps.children })
+const { treeToList, listToTree, forEach } = useCutTree({ id: props.treeProps.id, parentId: props.treeProps.pid, children: props.treeProps.children })
 const leftTreeRef = ref() // 左侧树实例
 const rightTreeRef = ref() // 右侧树实例
 const state = reactive({
