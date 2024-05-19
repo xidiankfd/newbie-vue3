@@ -97,10 +97,10 @@ onMounted(() => {
       <el-card :shadow="appStore.appConfig.elChardShadow">
         <el-form ref="queryFormRef" inline :model="state.queryForm">
           <el-form-item label="IP" prop="clientIp">
-            <el-input v-model="state.queryForm.clientIp" style="width:150px;" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
+            <el-input v-model="state.queryForm.clientIp" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
           </el-form-item>
           <el-form-item label="请求地址" prop="targetUri">
-            <el-input v-model="state.queryForm.targetUri" style="width:150px;" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
+            <el-input v-model="state.queryForm.targetUri" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-select v-model="state.queryForm.status" placeholder="请选择" clearable style="width: 100px;">
@@ -170,7 +170,11 @@ onMounted(() => {
             show-overflow-tooltip
           />
           <el-table-column
-            prop="targetUri" label="请求路径" align="left" header-align="center" min-width="200px"
+            prop="targetUri" label="请求路径" align="left" header-align="center" min-width="220px"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="costTime" label="请求耗时" align="left" header-align="center" min-width="100px"
             show-overflow-tooltip
           />
           <el-table-column label="状态" width="90" align="center" header-align="center">
