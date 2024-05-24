@@ -115,10 +115,10 @@ onMounted(() => {
       <el-card :shadow="appStore.appConfig.elChardShadow" class="mt-2">
         <div class="w-full pb-3 flex justify-between">
           <div>
-            <el-button v-hasPerm="'sys.log.operate.del'" type="danger" :icon="Minus" @click="methods.delBatch(null)">
+            <el-button v-hasPerm="'sys.log.login.del'" type="danger" :icon="Minus" @click="methods.delBatch(null)">
               删除
             </el-button>
-            <el-button v-hasPerm="'sys.log.operate.del'" type="info" @click="methods.deleteBeforeData">
+            <el-button v-hasPerm="'sys.log.login.del'" type="info" @click="methods.deleteBeforeData">
               <template #icon>
                 <el-icon>
                   <svg-icon name="MaterialSymbolsAutoDeleteOutline" />
@@ -184,7 +184,7 @@ onMounted(() => {
           />
           <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center" />
           <el-table-column
-            v-hasPerm="['sys.dept.add', 'sys.dept.update', 'sys.dept.del']"
+            v-hasPerm="['sys.log.login.del']"
             label="操作" min-width="100" align="center" fixed="right"
           >
             <template #default="{ row }">
@@ -192,7 +192,7 @@ onMounted(() => {
                 :hide-after="0" title="确认要删除该日志吗？" @confirm="methods.delBatch(row.id)"
               >
                 <template #reference>
-                  <el-button v-hasPerm="'sys.dept.del'" type="danger" link>
+                  <el-button type="danger" link>
                     删除
                   </el-button>
                 </template>

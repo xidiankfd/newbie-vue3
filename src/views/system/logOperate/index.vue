@@ -195,7 +195,7 @@ onMounted(() => {
           />
           <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center" />
           <el-table-column
-            v-hasPerm="['sys.dept.add', 'sys.dept.update', 'sys.dept.del']"
+            v-hasPerm="'sys.log.operate.del'"
             label="操作" min-width="100" align="center" fixed="right"
           >
             <template #default="{ row }">
@@ -203,7 +203,7 @@ onMounted(() => {
                 :hide-after="0" title="确认要删除该日志吗？" @confirm="methods.delBatch(row.id)"
               >
                 <template #reference>
-                  <el-button v-hasPerm="'sys.dept.del'" type="danger" link>
+                  <el-button type="danger" link>
                     删除
                   </el-button>
                 </template>
