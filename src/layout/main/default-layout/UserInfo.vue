@@ -16,7 +16,7 @@ function command(flag) {
   if (flag === 'logout')
     userStore.logout()
   else if (flag === 'userinfo')
-    router.push('/user-info')
+    router.push('/personal-center')
 }
 </script>
 

@@ -28,5 +28,5 @@ export function initAdmin(data) {
 }
 // 修改密码
 export function updatePassword(data) {
-  return axios.post('/security/updatePassword', data, { successMsgType: msgType.msg })
+  return axios.post('/security/updatePassword', data, { successMsgType: msgType.none })
 }

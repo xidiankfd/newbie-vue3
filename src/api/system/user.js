@@ -42,3 +42,12 @@ export function deleteBatchApi(ids) {
 export function updateUserPassword(data) {
   return axios.post(`${BASE_URL}/updateUserPassword`, data, { successMsgType: msgType.msg })
 }
+
+/**
+ * 当前用户修改自己的基本用户信息
+ * @param {*} data
+ * @returns
+ */
+export function updateByCurrApi(data) {
+  return axios.post(`${BASE_URL}/updateByCurr`, data, { successMsgType: msgType.none })
+}
