@@ -35,7 +35,7 @@ const state = reactive({
 const methods = {
   async queryData() {
     state.queryLoading = true
-    const { ok, data } = await getRolePaging({ ...state.form, page: current.value, size: size.value })
+    const { ok, data } = await getRolePaging({ ...state.form, current: current.value, size: size.value })
     state.tableData = ok ? data.records : []
     state.total = ok ? data.total : 0
 

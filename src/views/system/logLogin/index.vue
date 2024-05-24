@@ -2,12 +2,12 @@
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Refresh, Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
-import { deleteBatchApi, deleteBeforeDataApi, logOperatepagingApi } from '@/api/system/log_operate'
+import { deleteBatchApi, deleteBeforeDataApi, logLoginPagingApi } from '@/api/system/log_login'
 import { useAppStore } from '@/stores/modules/app'
 import usePagingParams from '@/hooks/usePagingParams'
 
 defineOptions({
-  name: 'SysLogOperate',
+  name: 'SysLogLogin',
 })
 const { current, size } = usePagingParams()
 const appStore = useAppStore()
@@ -17,22 +17,15 @@ const statusList = [
   { value: '1', label: '正常' },
   { value: '0', label: '失败' },
 ]
-const methodList = [
-  { value: 'GET', label: 'GET' },
-  { value: 'POST', label: 'POST' },
-  { value: 'PUT', label: 'PUT' },
-  { value: 'DELETE', label: 'DELETE' },
-]
+
 /** 定义响应式数据 */
 const state = reactive({
   queryLoading: false,
   tableData: [],
   total: 0,
   queryForm: {
-    clientIp: '',
+    username: '',
     status: '',
-    method: '',
-    targetUri: '',
   },
 })
 /** 定义方法 */
@@ -40,7 +33,7 @@ const methods = {
   // 查询数据
   async queryData() {
     state.queryLoading = true
-    const { ok, data } = await logOperatepagingApi({ ...state.queryForm, current: current.value, size: size.value })
+    const { ok, data } = await logLoginPagingApi({ ...state.queryForm, current: current.value, size: size.value })
     state.tableData = ok ? data.records : []
     state.total = ok ? data.total : 0
     state.queryLoading = false
@@ -95,26 +88,13 @@ onMounted(() => {
     <el-main>
       <el-card :shadow="appStore.appConfig.elChardShadow">
         <el-form ref="queryFormRef" inline :model="state.queryForm">
-          <el-form-item label="IP" prop="clientIp">
-            <el-input v-model="state.queryForm.clientIp" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
-          </el-form-item>
-          <el-form-item label="请求地址" prop="targetUri">
-            <el-input v-model="state.queryForm.targetUri" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="state.queryForm.username" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-select v-model="state.queryForm.status" placeholder="请选择" clearable style="width: 100px;">
               <el-option
                 v-for="item in statusList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="请求方式" prop="method">
-            <el-select v-model="state.queryForm.method" placeholder="请选择" clearable style="width: 100px;">
-              <el-option
-                v-for="item in methodList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -161,20 +141,26 @@ onMounted(() => {
             header-align="center"
           />
           <el-table-column
-            prop="clientIp" label="客户端IP" show-overflow-tooltip align="center" header-align="center"
+            prop="loginIp" label="IP" align="center" header-align="center"
             width="120px"
           />
           <el-table-column
-            prop="method" label="请求方式" align="left" header-align="center" width="100px"
-            show-overflow-tooltip
-          />
+            prop="loginType" label="登入/登出" show-overflow-tooltip align="center" header-align="center"
+            min-width="100px"
+          >
+            <template #default="{ row }">
+              <el-tag :type="row.loginType === '1' ? 'success' : 'warning'">
+                {{ row.loginType === '1' ? '登入' : '登出' }}
+              </el-tag>
+            </template>
+          </el-table-column>
+
           <el-table-column
-            prop="targetUri" label="请求路径" align="left" header-align="center" min-width="220px"
-            show-overflow-tooltip
+            prop="loginMethod" label="登录方式" align="left" header-align="center" width="100px"
           />
+
           <el-table-column
             prop="costTime" label="请求耗时" align="left" header-align="center" min-width="100px"
-            show-overflow-tooltip
           />
           <el-table-column label="状态" width="90" align="center" header-align="center">
             <template #default="{ row }">
@@ -188,9 +174,12 @@ onMounted(() => {
             prop="failReason" label="失败原因" show-overflow-tooltip align="left" header-align="center"
             min-width="200px"
           />
-
           <el-table-column
-            prop="targetFun" label="执行的类方法" width="180" align="left" header-align="center"
+            prop="browser" label="浏览器信息" width="180" align="left" header-align="center"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="os" label="操作系统" align="left" header-align="center" min-width="220px"
             show-overflow-tooltip
           />
           <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center" />
