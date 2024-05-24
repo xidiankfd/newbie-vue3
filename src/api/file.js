@@ -1,6 +1,11 @@
 import axios, { msgType } from '@/utils/axios'
 
 /**
+ * 上传接口路径
+ */
+export const uploadPath = `${import.meta.env.VITE_FILE_BASE_URL}/upload`
+
+/**
  * 上传
  * @param { File | FileList } file 文件对象
  * @param { Object } params 其它参数
@@ -44,8 +49,17 @@ export function remove(filePath) {
   })
 }
 
-export function getFileDownloadUrl(filePath) {
-  return `${import.meta.env.VITE_FILE_BASE_URL}/download?filePath=${filePath}&_t=${Date.now()}`
+/**
+ * 获取下载地址
+ * @param {String} filePath 文件路径
+ * @param {Boolean} noKeep 强制不使用缓存
+ * @returns
+ */
+export function getFileDownloadUrl(filePath, noKeep = false) {
+  if (noKeep)
+    return `${import.meta.env.VITE_FILE_BASE_URL}/download?filePath=${filePath}&_t=${Date.now()}`
+  else
+    return `${import.meta.env.VITE_FILE_BASE_URL}/download?filePath=${filePath}`
 }
 
 /**

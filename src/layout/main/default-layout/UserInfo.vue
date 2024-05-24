@@ -4,6 +4,7 @@ import { ArrowDownBold, ArrowUpBold, SwitchButton, User } from '@element-plus/ic
 import { useAppStore } from '@/stores/modules/app'
 import { useUserStore } from '@/stores/modules/user'
 import router from '@/router'
+import { getFileDownloadUrl } from '@/api/file'
 
 const userStore = useUserStore()
 
@@ -24,7 +25,7 @@ function command(flag) {
   <div class="pl-5 pr-5 flex items-center">
     <el-dropdown :trigger="appConfig.trigger" @visible-change="visible = $event" @command="command">
       <span class="el-dropdown-link  text-[16px]">
-        <el-avatar class="mr-3" :src="userStore.userInfo?.avatar || '/default-avatar.png'" />
+        <el-avatar class="mr-3" :src="userStore.userInfo?.avatar ? getFileDownloadUrl(userStore.userInfo.avatar) : '/default-avatar.png'" />
         {{ userStore.userInfo?.nickName }}
         <el-icon class="el-icon--right ">
           <Transition name="scale" mode="out-in">

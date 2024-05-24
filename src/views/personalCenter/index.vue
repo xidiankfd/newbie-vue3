@@ -8,13 +8,14 @@ import useAuth from '@/hooks/useAuth'
 import { useUserStore } from '@/stores/modules/user'
 import { updatePassword } from '@/api/security'
 import { updateByCurrApi } from '@/api/system/user'
+import { getFileDownloadUrl, uploadPath } from '@/api/file'
 
 defineOptions({
   name: 'PersonalCenter',
 })
 
 const userStore = useUserStore()
-const { userInfo } = useAuth()
+const { userInfo, tokenInfo } = useAuth()
 const { current, size } = usePagingParams()
 const appStore = useAppStore()
 const editFormRef = ref()
@@ -33,12 +34,14 @@ const state = reactive({
     avatar: userInfo.avatar,
     remark: userInfo.remark,
   },
+  avatarFile: null,
   showUpdatePasswordDialog: false,
   updatePasswordForm: {
     oldPassword: '',
     newPassword: '',
     confirmPassword: '',
   },
+
 })
 const rules = {
   nickName: [
@@ -143,6 +146,10 @@ const methods = {
       }
     })
   },
+  onUploadSuccess(res) {
+    if (res?.ok)
+      state.editForm.avatar = res.data[0].filePath
+  },
 }
 onMounted(() => {
   methods.queryData()
@@ -164,7 +171,7 @@ onMounted(() => {
 
             <el-descriptions :column="1" border>
               <template #title>
-                <el-avatar :size="50" :src="userInfo?.avatar || '/default-avatar.png'" />
+                <el-avatar :size="50" :src="userInfo?.avatar ? getFileDownloadUrl(userInfo.avatar) : '/default-avatar.png'" />
               </template>
               <template #extra>
                 <el-button type="primary" link @click="state.showEditDialog = true">
@@ -291,7 +298,17 @@ onMounted(() => {
             </el-col>
             <el-col :span="12" :offset="0">
               <el-form-item label="头像">
-                <el-avatar :size="50" :src="state.editForm.avatar || '/default-avatar.png'" />
+                <el-avatar :size="38" :src="state.editForm.avatar ? getFileDownloadUrl(state.editForm.avatar) : '/default-avatar.png' " />
+                <el-upload
+                  :action="uploadPath"
+                  :show-file-list="false"
+                  :headers="{ satoken: tokenInfo.tokenValue }"
+                  :on-success="methods.onUploadSuccess"
+                >
+                  <el-button link type="primary" class="ml-2">
+                    修改头像
+                  </el-button>
+                </el-upload>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
