@@ -3,7 +3,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useAppStore } from '@/stores/modules/app'
 import usePagingParams from '@/hooks/usePagingParams'
-import { pagingByCurrUserApi } from '@/api/system/log_login'
+import { pagingByCurrUserApi } from '@/api/monitor/log_login'
 import useAuth from '@/hooks/useAuth'
 import { useUserStore } from '@/stores/modules/user'
 import { updatePassword } from '@/api/security'
@@ -191,7 +191,7 @@ onMounted(() => {
                 {{ userInfo.email }}
               </el-descriptions-item>
               <el-descriptions-item label="性别">
-                <el-tag>
+                <el-tag :type="userInfo.gender === '1' ? 'primary' : userInfo.gender === '0' ? 'danger' : 'warning'">
                   {{ userInfo.gender === '1' ? '男' : userInfo.gender === '0' ? '女' : '未知' }}
                 </el-tag>
               </el-descriptions-item>

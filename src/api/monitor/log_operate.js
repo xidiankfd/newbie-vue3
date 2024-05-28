@@ -1,6 +1,6 @@
 import axios, { msgType } from '@/utils/axios'
 
-const BASE_URL = '/system/log/operate'
+const BASE_URL = '/monitor/log/operate'
 
 /**
  * 获取操作日志分页数据

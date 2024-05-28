@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { Minus, Refresh, Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
-import { deleteBatchApi, deleteBeforeDataApi, logOperatepagingApi } from '@/api/system/log_operate'
+import { deleteBatchApi, deleteBeforeDataApi, logOperatepagingApi } from '@/api/monitor/log_operate'
 import { useAppStore } from '@/stores/modules/app'
 import usePagingParams from '@/hooks/usePagingParams'
 

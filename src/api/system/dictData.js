@@ -52,3 +52,7 @@ export function updateDictDataAsDefaultApi(id) {
 export function getDictDataListByTypeCodeApi(typeCode) {
   return axios.get(`${BASE_URL}/getDictDataListByTypeCode/${typeCode}`)
 }
+
+export function cleanCacheApi() {
+  return axios.get(`${BASE_URL}/cleanCache`)
+}

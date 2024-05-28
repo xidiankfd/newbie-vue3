@@ -1,6 +1,6 @@
 import axios, { msgType } from '@/utils/axios'
 
-const BASE_URL = '/system/log/login'
+const BASE_URL = '/monitor/log/login'
 
 /**
  * 获取登录日志分页数据

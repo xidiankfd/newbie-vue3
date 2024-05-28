@@ -162,6 +162,9 @@ nextTick(() => {
     state.type = props.row.type
     if (props.row.type === '1') {
       state.form = { ...props.row }
+      if (!state.form.icon)
+        state.form.icon = ''
+
       state.disabledButEdit = true
     }
 

@@ -5,6 +5,7 @@ import { ElMessageBox } from 'element-plus'
 import DictDataForm from './DictDataForm.vue'
 import DictTypeSelect from './DictTypeSelect.vue'
 import {
+  cleanCacheApi,
   deleteBatchApi,
   getDictDataListByTypeCodeApi,
   getDictDataPagingApi,
@@ -95,6 +96,11 @@ const methods = {
     if (ok)
       state.eleTypeList = data
   },
+  cleanCache() {
+    cleanCacheApi().then((res) => {
+
+    })
+  },
 
 }
 onMounted(() => {
@@ -145,6 +151,9 @@ onMounted(() => {
                 </el-button>
                 <el-button v-hasPerm="'sys.dict.data.del'" type="danger" :icon="Minus" @click="methods.batchDel(null)">
                   删除
+                </el-button>
+                <el-button type="info" :icon="Minus" @click="methods.cleanCache(null)">
+                  清除缓存
                 </el-button>
               </div>
               <div>
