@@ -45,7 +45,7 @@ const methods = {
 
   // 批量删除
   async delBatch(id) {
-    if (id || id === 0) {
+    if (id) {
       const { ok } = await deleteBatchApi([id])
       ok && methods.queryData()
     }
@@ -142,7 +142,7 @@ onMounted(() => {
           />
           <el-table-column
             prop="loginIp" label="IP" align="center" header-align="center"
-            width="120px"
+            width="130px"
           />
           <el-table-column
             prop="loginType" label="登入/登出" show-overflow-tooltip align="center" header-align="center"

@@ -7,7 +7,7 @@ import usePagingParams from '@/hooks/usePagingParams'
 
 const props = defineProps({
   moduleValue: { type: Boolean, default: false },
-  roleId: { type: Number, required: true },
+  roleId: { type: String, required: true },
   roleName: { type: String, required: true },
 })
 

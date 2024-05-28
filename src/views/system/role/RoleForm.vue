@@ -22,7 +22,7 @@ const state = reactive({
 })
 /** 抽屉标题 */
 const title = computed(() => {
-  if (props.row.id || props.row.id === 0)
+  if (props.row.id)
     return '修改角色'
   else
     return '新增角色'
@@ -59,7 +59,7 @@ const rules = {
   ],
 }
 onMounted(() => {
-  if (props.row.id || props.row.id === 0)
+  if (props.row.id)
     state.form = { ...props.row }
 })
 </script>
@@ -75,7 +75,7 @@ onMounted(() => {
         <el-input v-model="state.form.roleName" placeholder="角色名称" />
       </el-form-item>
       <el-form-item label="角色编码" prop="roleCode">
-        <el-input v-model="state.form.roleCode" placeholder="角色编码" />
+        <el-input v-model="state.form.roleCode" placeholder="角色编码" :disabled="props.row.id" />
       </el-form-item>
       <el-form-item label="首页地址" prop="homePath">
         <el-input v-model="state.form.homePath" placeholder="请输入路由地址" />

@@ -29,7 +29,7 @@ const state = reactive({
   deptTree: [],
   form: {
     id: props.currentRow.id || null,
-    parentId: props.currentRow.parentId || 0,
+    parentId: props.currentRow.parentId || '0',
     deptName: props.currentRow.deptName || '',
     leader: props.currentRow.leader || '',
     phone: props.currentRow.phone || '',
@@ -42,7 +42,7 @@ const state = reactive({
 /** 定义方法 */
 const methods = {
   isUpdate() {
-    return !!(props.currentRow.id === 0 || props.currentRow.id)
+    return !!props.currentRow.id
   },
   // 初始化部门树
   async initDeptTree() {
@@ -51,7 +51,7 @@ const methods = {
     state.deptTree = [
       {
         deptName: '顶级',
-        id: 0,
+        id: '0',
       },
       ...data,
     ]

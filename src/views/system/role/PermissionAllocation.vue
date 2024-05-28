@@ -7,7 +7,7 @@ import { listByRoleId, removeAndSaveByRoleId } from '@/api/system/role_menu'
 
 const props = defineProps({
   moduleValue: { type: Boolean, default: false },
-  roleId: { type: Number, required: true },
+  roleId: { type: String, required: true },
   roleName: { type: String, required: true },
 })
 const emit = defineEmits(['update:modelValue'])

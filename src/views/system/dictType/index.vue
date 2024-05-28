@@ -47,7 +47,7 @@ const methods = {
     state.dialogShow = true
   },
   async batchDel(id) {
-    if (id || id === 0) {
+    if (id) {
       const { ok } = await deleteBatchApi([id])
       ok && methods.queryData()
     }

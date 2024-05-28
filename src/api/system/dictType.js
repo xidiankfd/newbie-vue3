@@ -20,7 +20,7 @@ export function getDictTypePagingApi(current, size, params) {
  * @returns {Promise}
  */
 export function saveDictTypeApi(data) {
-  if (data.id || data.id === 0)
+  if (data.id)
     return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })

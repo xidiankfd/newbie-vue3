@@ -45,7 +45,7 @@ const methods = {
     state.tableIsExpansionAll = !state.tableIsExpansionAll
   },
   async delBatch(id) {
-    if (id || id === 0) {
+    if (id) {
       const { ok } = await deleteBatchApi([id])
       ok && methods.queryData()
     }

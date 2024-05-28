@@ -25,7 +25,7 @@ const state = reactive({
 })
 /** 标题 */
 const title = computed(() => {
-  if (props.row.id || props.row.id === 0)
+  if (props.row.id)
     return '修改字典'
   else
     return '新增字典'

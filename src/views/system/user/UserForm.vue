@@ -32,8 +32,8 @@ const state = reactive({
   saveLoading: false, // 保存按钮loading
   // 表单数据
   formData: {
-    id: (props.row.id || props.row.id === 0) ? props.row.id : null,
-    deptId: (props.row.deptId || props.row.deptId === 0) ? props.row.deptId : null,
+    id: props.row.id || null,
+    deptId: props.row.deptId || null,
     username: props.row.username || '',
     password: '',
     nickName: props.row.nickName || '',
@@ -102,7 +102,7 @@ const methods = {
 }
 const dialogTitle = computed(() => state.isUpdate ? '修改用户' : '新增用户')
 onMounted(() => {
-  state.isUpdate = props.row.id || props.row.id === 0
+  state.isUpdate = !!props.row.id
   methods.initDeptTree()
 })
 </script>

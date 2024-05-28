@@ -19,7 +19,7 @@ export function getUserPaging(current, size, params = {}) {
  * @returns {Promise}
  */
 export function saveUserApi(data) {
-  if (data.id || data.id === 0)
+  if (data.id)
     return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
 
   else

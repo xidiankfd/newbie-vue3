@@ -17,7 +17,7 @@ export function getDeptTreeApi(params) {
  * @returns {Promise}
  */
 export function saveDeptApi(data) {
-  if (data.id === 0 || data.id)
+  if (data.id)
     return axios.post(`${BASE_URL}/update`, data, { successMsgType: msgType.msg })
   else
     return axios.post(`${BASE_URL}/add`, data, { successMsgType: msgType.msg })

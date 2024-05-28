@@ -51,7 +51,7 @@ const methods = {
 
   // 批量删除
   async delBatch(id) {
-    if (id || id === 0) {
+    if (id) {
       const { ok } = await deleteBatchApi([id])
       ok && methods.queryData()
     }
@@ -184,7 +184,7 @@ onMounted(() => {
           >
             <template #default="{ row }">
               <el-button
-                v-hasPerm="'sys.dept.add'" :disabled="row.type === '0'" type="primary" link
+                v-hasPerm="'sys.dept.add'" type="primary" link
                 @click="methods.openDeptForm({ parentId: row.id })"
               >
                 新增

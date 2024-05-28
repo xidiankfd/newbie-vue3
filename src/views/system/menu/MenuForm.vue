@@ -31,7 +31,7 @@ const state = reactive({
   form: {
     isIframe: false, // 内嵌外链
     id: null,
-    parentId: props.row.parentId || 0,
+    parentId: props.row.parentId || '0',
     title: '',
     type: '1',
     icon: '',
@@ -53,7 +53,7 @@ const state = reactive({
   // 按钮form
   formBut: {
     id: null,
-    parentId: props.row.parentId || 0,
+    parentId: props.row.parentId || '0',
     title: '',
     type: '0',
     sort: 1,
@@ -122,7 +122,7 @@ const methods = {
     state.menus = [
       {
         title: '顶级',
-        id: 0,
+        id: '0',
         children: [],
       },
       ...data,
@@ -150,7 +150,7 @@ const methods = {
   },
 }
 const drawerTitle = computed(() => {
-  if (props.row.id || props.row.id === 0)
+  if (props.row.id)
     return props.row.type === '0' ? '修改按钮' : '修改菜单'
 
   else
@@ -158,7 +158,7 @@ const drawerTitle = computed(() => {
 })
 
 nextTick(() => {
-  if (props.row.id || props.row.id === 0) {
+  if (props.row.id) {
     state.type = props.row.type
     if (props.row.type === '1') {
       state.form = { ...props.row }
@@ -191,6 +191,7 @@ nextTick(() => {
                 <el-tree-select
                   v-model="state.form.parentId" filterable :data="state.menus" :props="menuTreeProp"
                   node-key="id" check-strictly
+                  :disabled="state.isUpdate"
                 />
               </el-form-item>
             </el-col>
@@ -351,6 +352,7 @@ nextTick(() => {
             <el-tree-select
               v-model="state.formBut.parentId" :data="state.menus" :props="menuTreeProp" node-key="id"
               check-strictly
+              :disabled="state.isUpdate"
             />
           </el-form-item>
 
