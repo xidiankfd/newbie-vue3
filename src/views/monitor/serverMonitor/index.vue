@@ -2,6 +2,10 @@
 import { onMounted, reactive } from 'vue'
 import { getServerInfoApi } from '@/api/monitor/server'
 
+defineOptions({
+  name: 'SysServerMonitor',
+})
+
 const percentageConfig = {
 
   colors: [
