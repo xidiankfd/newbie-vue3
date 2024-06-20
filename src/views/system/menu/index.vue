@@ -21,7 +21,7 @@ const state = reactive({
   currentRow: {},
   showDrawer: false,
   queryLoading: false,
-  tableIsExpansionAll: true,
+  tableIsExpansionAll: false,
   tableData: [],
   queryForm: {
     title: '',
@@ -128,7 +128,7 @@ onMounted(() => {
         </div>
         <el-table
           ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="id"
-          height="calc(100vh - 300px)" default-expand-all
+          height="calc(100vh - 300px)"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column prop="title" label="标题" width="180" fixed="left" align="left" header-align="center" />
