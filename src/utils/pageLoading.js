@@ -10,7 +10,7 @@ export default function usePageLoading() {
     loadingInstance && loadingInstance.close()
     timer && clearTimeout(timer)
   }
-  function start(delay = 500) {
+  function start(delay = 1000) {
     close()
     timer = setTimeout(() => {
       loadingInstance = ElLoading.service({
