@@ -49,6 +49,7 @@ const state = reactive({
     iframeLink: '',
     perm: '',
     transition: '',
+    routeRedirect: '',
   },
   // 按钮form
   formBut: {
@@ -236,6 +237,11 @@ nextTick(() => {
                   </div>
                 </template>
                 <el-input v-model="state.form.routeName" placeholder="路由name" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" :offset="0">
+              <el-form-item label="路由重定向" prop="routeRedirect">
+                <el-input v-model="state.form.routeRedirect" placeholder="路由重定向" />
               </el-form-item>
             </el-col>
             <el-col :span="24" :offset="0">
