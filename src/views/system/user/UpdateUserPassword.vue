@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { updateUserPassword } from '@/api/system/user'
+import { encode } from 'js-base64';
 
 const props = defineProps({
   row: { type: Object, required: true },
@@ -22,9 +23,13 @@ const methods = {
     await formEl.validate(async (valid) => {
       if (valid) {
         const data = {
-          ...state.form,
           userId: props.row.id,
         }
+        data.otext = encode(state.form.oldPassword)
+        data.ntext = encode(state.form.newPassword)
+        data.ctext = encode(state.form.confirmPassword)
+        data.immediatelyKick = state.form.immediatelyKick
+        
         const { ok } = await updateUserPassword(data)
         if (ok)
           value.value = false

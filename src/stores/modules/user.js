@@ -6,6 +6,7 @@ import { useRouteStore } from './route'
 import router from '@/router'
 import { loginApi, logoutApi } from '@/api/security'
 import { t } from '@/i18n'
+import { encode } from 'js-base64';
 
 const PREFIX = import.meta.env.VITE_APP_STORAGE_PREFIX
 
@@ -16,6 +17,12 @@ export const useUserStore = defineStore('user', () => {
   // 登录
   async function login(form) {
     const replacePath = router.currentRoute.value.query.replace || '/'
+
+    form.utext = encode(form.username);
+    form.ptext = encode(form.password);
+    form.username = null;
+    form.password = null;
+
     const res = await loginApi(form)
     if (!res.ok)
       return res

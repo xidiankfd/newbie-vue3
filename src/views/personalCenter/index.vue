@@ -9,6 +9,7 @@ import { useUserStore } from '@/stores/modules/user'
 import { updatePassword } from '@/api/security'
 import { updateByCurrApi } from '@/api/system/user'
 import { getFileDownloadUrl, uploadPath } from '@/api/file'
+import { encode } from 'js-base64';
 
 defineOptions({
   name: 'PersonalCenter',
@@ -99,7 +100,12 @@ const methods = {
       return
     await formEl.validate(async (valid, fields) => {
       if (valid) {
-        const res = await updatePassword({ ...state.updatePasswordForm })
+        const data = {
+          otext:encode(state.updatePasswordForm.oldPassword),
+          ntext: encode(state.updatePasswordForm.newPassword),
+          ctext: encode(state.updatePasswordForm.confirmPassword),
+        }
+        const res = await updatePassword(data)
         if (res?.ok) {
           ElMessageBox.confirm(
             '修改密码成功',
