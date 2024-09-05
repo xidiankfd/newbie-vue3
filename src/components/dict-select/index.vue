@@ -1,6 +1,7 @@
 <script setup>
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { onMounted, reactive } from 'vue'
+import { sessionCache } from '@/utils/cache'
 defineOptions({
     name: 'DictSelect',
 })
@@ -22,16 +23,25 @@ const state = reactive({
     options: []
 })
 
-function initData() {
-    getDictDataListByTypeCodeApi(props.typeCode).then(res => {
-        state.options = res.data
-        if (props.autoDef && !model.value && model.value !== 0) {
-            const defaultOption = state.options.find(item => item.def === 'Y')
-            if (defaultOption) {
-                model.value = defaultOption.value
-            }
+function autoDefault() {
+    if (props.autoDef && !model.value && model.value !== 0) {
+        const defaultOption = state.options.find(item => item.def === 'Y')
+        if (defaultOption) {
+            model.value = defaultOption.value
         }
-    })
+    }
+}
+
+function initData() {
+    if (sessionCache.has(`dictData_${props.typeCode}`)) {
+        state.options = sessionCache.get(`dictData_${props.typeCode}`)
+        autoDefault()
+    } else {
+        getDictDataListByTypeCodeApi(props.typeCode).then(res => {
+            state.options = res.data
+            autoDefault()
+        })
+    }
 }
 onMounted(() => {
     initData()

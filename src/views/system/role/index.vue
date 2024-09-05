@@ -101,9 +101,9 @@ onMounted(() => {
             <el-input v-model="state.form.roleCode" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <DictSelect v-model="state.form.status" type-code="commonStatus" />
+            <DictSelect v-model="state.form.status" type-code="commonStatus" style="width: 100px;" clearable :auto-def="false"/>
           </el-form-item>
-          <el-form-item>
+          <el-form-item> 
             <el-button type="primary" :icon="Search" :loading="state.queryLoading" @click="methods.queryData">
               查询
             </el-button>

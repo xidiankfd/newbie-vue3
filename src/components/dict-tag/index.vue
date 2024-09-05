@@ -1,6 +1,7 @@
 <script setup>
 import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
-import { onMounted, reactive,computed } from 'vue'
+import { onMounted, reactive, computed } from 'vue'
+import { sessionCache } from '@/utils/cache'
 defineOptions({
     name: 'DictTag',
 })
@@ -18,9 +19,14 @@ const state = reactive({
 })
 
 function initData() {
-    getDictDataListByTypeCodeApi(props.typeCode).then(res => {
-        state.options = res.data
-    })
+    if (sessionCache.has(`dictData_${props.typeCode}`)) {
+        state.options = sessionCache.get(`dictData_${props.typeCode}`)
+    } else {
+        getDictDataListByTypeCodeApi(props.typeCode).then(res => {
+            sessionCache.set(`dictData_${props.typeCode}`, res.data)
+            state.options = res.data
+        })
+    }
 }
 
 const type = computed(() => state.options.find(item => item.value === model.value)?.eleType || '');
