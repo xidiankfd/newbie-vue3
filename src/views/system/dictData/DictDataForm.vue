@@ -6,7 +6,6 @@ const props = defineProps({
   row: { type: Object, default: () => {} },
   currentDictType: { type: Object, default: () => {} },
   modelValue: { type: Boolean, default: false },
-  eleTypeList: { type: Array, required: true },
 })
 const emit = defineEmits(['onSaveSuccess', 'update:modelValue'])
 
@@ -19,7 +18,7 @@ const state = reactive({
     label: props.row.label || '',
     value: props.row.value || '',
     typeId: null,
-    eleType: props.row.id ? props.row.eleType : props.eleTypeList.find(item => item.def === 'Y')?.value,
+    eleType: props.row.eleType || '',
     eleClass: props.row.eleClass || '',
     sort: props.row.sort || props.row.sort === 0 ? props.row.sort : 1,
     status: props.row.status || '1',
@@ -99,14 +98,7 @@ onMounted(() => {
         <el-input v-model="state.form.value" placeholder="数据值" />
       </el-form-item>
       <el-form-item label="元素类型" prop="eleType">
-        <el-select v-model="state.form.eleType" placeholder="请选择" filterable>
-          <el-option
-            v-for="item in eleTypeList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+        <DictSelect v-model="state.form.eleType" type-code="eleType" />
       </el-form-item>
       <el-form-item label="元素样式" prop="eleClass">
         <el-input v-model="state.form.eleClass" placeholder="元素样式类名" />

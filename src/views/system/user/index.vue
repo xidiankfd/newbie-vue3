@@ -8,7 +8,6 @@ import { deleteBatchApi, getUserPaging } from '@/api/system/user'
 import { getDeptTreeApi } from '@/api/system/dept'
 import ElTreeList from '@/components/el-tree-list/index.vue'
 import usePagingParams from '@/hooks/usePagingParams'
-import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
 defineOptions({
@@ -21,7 +20,6 @@ const tableRef = ref()
 const state = reactive({
   showUpdatePasswordDialog: false,
   userGenderList: [],
-  userStatusList: [],
   rawDeptTree: [],
   deptTree: [],
   currentRow: {},
@@ -97,23 +95,10 @@ const methods = {
     state.showDialog = false
     methods.queryData()
   },
-  /** 查询字典 */
-  async getUserStatusDict() {
-    // 用户状态
-    const { ok, data } = await getDictDataListByTypeCodeApi('userStatus')
-    if (ok)
-      state.userStatusList = data
-  },
-  async getUserGenderDict() {
-    const { ok, data } = await getDictDataListByTypeCodeApi('userGender')
-    if (ok)
-      state.userGenderList = data
-  },
+  
 }
 onMounted(() => {
   methods.initDeptTree()
-  methods.getUserStatusDict()
-  methods.getUserGenderDict()
   methods.queryData()
 })
 </script>
@@ -203,16 +188,12 @@ onMounted(() => {
             <el-table-column prop="email" label="邮箱" header-align="center" min-width="160px" show-overflow-tooltip />
             <el-table-column prop="gender" label="性别" align="center" width="100px">
               <template #default="{ row }">
-                <el-tag :type="state.userGenderList.find(item => item.value === row.gender)?.eleType || ''">
-                  {{ state.userGenderList.find(item => item.value === row.gender)?.label }}
-                </el-tag>
+                <DictTag v-model="row.gender" type-code="userGender"/>
               </template>
             </el-table-column>
             <el-table-column prop="status" label="状态" align="center" width="100px">
               <template #default="{ row }">
-                <el-tag :type="state.userStatusList.find(item => item.value === row.status)?.eleType || ''">
-                  {{ state.userStatusList.find(item => item.value === row.status)?.label }}
-                </el-tag>
+                <DictTag v-model="row.status" type-code="userStatus"/>
               </template>
             </el-table-column>
             <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
@@ -250,8 +231,6 @@ onMounted(() => {
     <UpdateUserPassword v-if="state.showUpdatePasswordDialog" v-model="state.showUpdatePasswordDialog" :row="state.currentRow" />
     <UserForm
       v-if="state.showDialog" v-model="state.showDialog" :row="state.currentRow"
-      :user-gender-list="state.userGenderList"
-      :user-status-list="state.userStatusList"
       @on-save-success="methods.saveSuccess"
     />
   </el-main>

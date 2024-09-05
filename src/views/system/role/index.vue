@@ -7,7 +7,6 @@ import PermissionAllocation from './PermissionAllocation.vue'
 import UserAllocation from './UserAllocation.vue'
 import { deleteBatchApi, getRolePaging } from '@/api/system/role'
 import usePagingParams from '@/hooks/usePagingParams'
-import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
 defineOptions({
@@ -20,7 +19,6 @@ const tableRef = ref()
 const state = reactive({
   showPermissionAllocation: false,
   showUserAllocation: false,
-  commonStatusList: [],
   currentRow: {},
   queryLoading: false,
   dialogShow: false,
@@ -84,14 +82,9 @@ const methods = {
         break
     }
   },
-  async getCommonStatusDict() {
-    const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
-    if (ok)
-      state.commonStatusList = data
-  },
+
 }
 onMounted(() => {
-  methods.getCommonStatusDict()
   methods.queryData()
 })
 </script>
@@ -108,14 +101,7 @@ onMounted(() => {
             <el-input v-model="state.form.roleCode" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select v-model="state.form.status" placeholder="请选择" clearable style="width: 100px;">
-              <el-option
-                v-for="item in state.commonStatusList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+            <DictSelect v-model="state.form.status" type-code="commonStatus" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" :icon="Search" :loading="state.queryLoading" @click="methods.queryData">
@@ -157,9 +143,7 @@ onMounted(() => {
           <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
           <el-table-column label="状态" align="center" header-align="center" width="100px">
             <template #default="{ row }">
-              <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
-                {{ state.commonStatusList.find(item => item.value === row.status)?.label }}
-              </el-tag>
+              <DictTag v-model="row.status" type-code="commonStatus" />
             </template>
           </el-table-column>
           <el-table-column prop="remark" label="描述" header-align="center" min-width="200px" />

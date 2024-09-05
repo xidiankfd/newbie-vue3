@@ -5,9 +5,9 @@ import { ElMessageBox } from 'element-plus'
 import DictTypeForm from './DictTypeForm.vue'
 import { deleteBatchApi, getDictTypePagingApi } from '@/api/system/dictType'
 import usePagingParams from '@/hooks/usePagingParams.js'
-import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 import router from '@/router'
+
 
 defineOptions({
   name: 'SysDeptType',
@@ -17,7 +17,6 @@ const { current, size } = usePagingParams()
 const queryFormRef = ref()
 const tableRef = ref()
 const state = reactive({
-  commonStatusList: [],
   currentRow: {},
   dialogShow: false,
   tableData: [],
@@ -70,15 +69,10 @@ const methods = {
     state.dialogShow = false
     methods.queryData()
   },
-  async getCommonStatusDict() {
-    const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
-    if (ok)
-      state.commonStatusList = data
-  },
+
 
 }
 onMounted(() => {
-  methods.getCommonStatusDict()
   methods.queryData()
 })
 </script>
@@ -95,20 +89,14 @@ onMounted(() => {
             <el-input v-model="state.form.typeCode" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select v-model="state.form.status" placeholder="请选择" clearable style="width: 100px;">
-              <el-option
-                v-for="item in state.commonStatusList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+            <DictSelect v-model="state.form.status" type-code="commonStatus" style="width: 100px;" :auto-def="false" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" :icon="Search" :loading="state.queryLoading" @click="methods.queryData">
               查询
             </el-button>
-            <el-button type="warning" :icon="Refresh" :loading="state.queryLoading" @click="methods.refreshQuery(queryFormRef)">
+            <el-button type="warning" :icon="Refresh" :loading="state.queryLoading"
+              @click="methods.refreshQuery(queryFormRef)">
               重置
             </el-button>
           </el-form-item>
@@ -131,29 +119,28 @@ onMounted(() => {
             <el-button :icon="Refresh" circle @click="methods.queryData" />
           </div>
         </div>
-        <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 350px)">
+        <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe
+          height="calc(100vh - 350px)">
           <el-table-column type="selection" width="55" />
           <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="65px">
             <template #default="{ $index }">
               {{ (current - 1) * size + $index + 1 }}
             </template>
           </el-table-column>
-          <el-table-column prop="typeName" label="字典分类名称" fixed="left" align="left" header-align="center" min-width="180px" />
-          <el-table-column prop="typeCode" label="字典分类编码" fixed="left" align="left" header-align="center" min-width="180px" />
+          <el-table-column prop="typeName" label="字典分类名称" fixed="left" align="left" header-align="center"
+            min-width="180px" />
+          <el-table-column prop="typeCode" label="字典分类编码" fixed="left" align="left" header-align="center"
+            min-width="180px" />
           <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
           <el-table-column label="状态" align="center" header-align="center" width="100px">
             <template #default="{ row }">
-              <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
-                {{ state.commonStatusList.find(item => item.value === row.status)?.label }}
-              </el-tag>
+              <DictTag v-model="row.status" type-code="commonStatus" />
             </template>
           </el-table-column>
           <el-table-column prop="remark" label="备注" header-align="center" min-width="200px" />
           <el-table-column prop="createTime" label="创建时间" align="center" width="180px" />
-          <el-table-column
-            v-hasPerm="['sys.dict.type.update', 'sys.dict.type.del']"
-            label="操作" align="center" fixed="right" width="120px"
-          >
+          <el-table-column v-hasPerm="['sys.dict.type.update', 'sys.dict.type.del']" label="操作" align="center"
+            fixed="right" width="120px">
             <template #default="{ row }">
               <el-button v-hasPerm="'sys.dict.type.update'" type="warning" link @click="methods.openEditForm(row)">
                 编辑
@@ -168,24 +155,13 @@ onMounted(() => {
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-          v-model:current-page="current"
-          v-model:page-size="size"
-          class="mt-5"
-          :default-page-size="size"
-          :page-sizes="[10, 20, 30, 40, 50, 100]"
-          background
-          layout="->,total,prev, pager, next, jumper,sizes"
-          :total="state.total"
-          @current-change="methods.queryData"
-          @size-change="methods.queryData"
-        />
+        <el-pagination v-model:current-page="current" v-model:page-size="size" class="mt-5" :default-page-size="size"
+          :page-sizes="[10, 20, 30, 40, 50, 100]" background layout="->,total,prev, pager, next, jumper,sizes"
+          :total="state.total" @current-change="methods.queryData" @size-change="methods.queryData" />
       </el-card>
     </el-main>
-    <DictTypeForm
-      v-if="state.dialogShow" v-model="state.dialogShow" :row="state.currentRow"
-      @on-save-success="methods.saveSuccess"
-    />
+    <DictTypeForm v-if="state.dialogShow" v-model="state.dialogShow" :row="state.currentRow"
+      @on-save-success="methods.saveSuccess" />
   </el-container>
 </template>
 

@@ -8,8 +8,6 @@ const props = defineProps({
     type: Object, default: () => { },
   },
   modelValue: { type: Boolean },
-  userGenderList: { type: Array, required: true },
-  userStatusList: { type: Array, required: true },
 })
 const emit = defineEmits(['onSaveSuccess', 'update:modelValue'])
 const showDialog = computed({
@@ -40,7 +38,7 @@ const state = reactive({
     phone: props.row.phone || '',
     homePath: props.row.homePath || '',
     email: props.row.email || '',
-    gender: props.row.gender || props.userGenderList.find(item => item.def === 'Y')?.value,
+    gender: props.row.gender || '',
     status: props.row.status || '1',
     sort: props.row.sort || props.row.sort === 0 ? props.row.sort : 1,
     remark: props.row.remark || '',
@@ -154,9 +152,7 @@ onMounted(() => {
         </el-col>
         <el-col :span="12">
           <el-form-item label="性别" prop="gender" class="w-full">
-            <el-select v-model="state.formData.gender" placeholder="请选择性别" class="w-full">
-              <el-option v-for="item in userGenderList" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            <DictSelect v-model="state.formData.gender" type-code="userGender" />
           </el-form-item>
         </el-col>
         <el-col :span="12">

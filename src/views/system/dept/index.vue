@@ -5,7 +5,6 @@ import useCutTree from 'cut-tree'
 import { ElMessageBox } from 'element-plus'
 import DeptForm from './DeptForm.vue'
 import { deleteBatchApi, getDeptTreeApi } from '@/api/system/dept'
-import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
 defineOptions({
@@ -17,7 +16,6 @@ const queryFormRef = ref()
 const { forEach } = useCutTree({ id: 'id', children: 'children' })
 /** 定义响应式数据 */
 const state = reactive({
-  commonStatusList: [],
   currentRow: {},
   dialogVisible: false,
   queryLoading: false,
@@ -79,14 +77,8 @@ const methods = {
     state.dialogVisible = false
     methods.queryData()
   },
-  async getCommonStatusDict() {
-    const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
-    if (ok)
-      state.commonStatusList = data
-  },
 }
 onMounted(() => {
-  methods.getCommonStatusDict()
   methods.queryData()
 })
 </script>
@@ -168,9 +160,7 @@ onMounted(() => {
           <el-table-column prop="sort" label="排序" width="70" align="right" header-align="center" />
           <el-table-column label="状态" width="90" align="center" header-align="center">
             <template #default="{ row }">
-              <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
-                {{ state.commonStatusList.find(item => item.value === row.status)?.label }}
-              </el-tag>
+              <DictTag v-model="row.status" type-code="commonStatus"/>
             </template>
           </el-table-column>
           <el-table-column

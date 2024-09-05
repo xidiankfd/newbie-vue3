@@ -4,9 +4,9 @@ import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import DictDataForm from './DictDataForm.vue'
 import DictTypeSelect from './DictTypeSelect.vue'
+
 import {
   deleteBatchApi,
-  getDictDataListByTypeCodeApi,
   getDictDataPagingApi,
   updateDictDataAsDefaultApi,
 } from '@/api/system/dictData'
@@ -22,7 +22,6 @@ const queryFormRef = ref()
 const tableRef = ref()
 const state = reactive({
   commonStatusList: [],
-  eleTypeList: [],
   currentRow: {},
   dialogShow: false,
   tableData: [],
@@ -84,22 +83,8 @@ const methods = {
     const { ok } = await updateDictDataAsDefaultApi(row.id)
     ok && methods.queryData()
   },
-
-  async getCommonStatusDict() {
-    const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
-    if (ok)
-      state.commonStatusList = data
-  },
-  async getEleTypeDict() {
-    const { ok, data } = await getDictDataListByTypeCodeApi('eleType')
-    if (ok)
-      state.eleTypeList = data
-  },
 }
-onMounted(() => {
-  methods.getCommonStatusDict()
-  methods.getEleTypeDict()
-})
+
 </script>
 
 <template>
@@ -116,12 +101,7 @@ onMounted(() => {
                 <el-input v-model="state.form.label" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
               </el-form-item>
               <el-form-item label="状态" prop="status">
-                <el-select v-model="state.form.status" placeholder="请选择" clearable style="width: 100px;">
-                  <el-option
-                    v-for="item in state.commonStatusList" :key="item.value" :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                <DictSelect v-model="state.form.status" type-code="commonStatus" style="width: 100px;" :auto-def="false"/>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" :icon="Search" :loading="state.queryLoading" @click="methods.queryData">
@@ -172,9 +152,7 @@ onMounted(() => {
 
               <el-table-column label="元素类型" align="center" header-align="center" width="120px">
                 <template #default="{ row }">
-                  <el-tag v-if="row.eleType" :type="state.eleTypeList.find(item => item.value === row.eleType)?.eleType">
-                    {{ state.eleTypeList.find(item => item.value === row.eleType)?.label }}
-                  </el-tag>
+                  <DictTag v-model="row.eleType" type-code="eleType"/>
                 </template>
               </el-table-column>
               <el-table-column label="元素样式" align="center" header-align="center" width="100px">
@@ -186,9 +164,7 @@ onMounted(() => {
               </el-table-column>
               <el-table-column label="状态" align="center" header-align="center" width="100px">
                 <template #default="{ row }">
-                  <el-tag v-if="row.status" :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
-                    {{ state.commonStatusList.find(item => item.value === row.status)?.label }}
-                  </el-tag>
+                  <DictTag v-model="row.status" type-code="commonStatus"/>
                 </template>
               </el-table-column>
               <el-table-column prop="remark" label="备注" header-align="center" min-width="200px" />
@@ -233,7 +209,7 @@ onMounted(() => {
     </el-main>
     <DictDataForm
       v-if="state.dialogShow" v-model="state.dialogShow" :row="state.currentRow"
-      :ele-type-list="state.eleTypeList" :current-dict-type="state.currentDictType"
+       :current-dict-type="state.currentDictType"
       @on-save-success="methods.saveSuccess"
     />
   </el-container>

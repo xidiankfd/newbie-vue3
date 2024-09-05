@@ -6,7 +6,6 @@ import { ElMessageBox } from 'element-plus'
 import MenuForm from './MenuForm.vue'
 import { deleteBatchApi, getMenuTreeApi } from '@/api/system/menu'
 import SvgIcon from '@/components/svg-icon/index.vue'
-import { getDictDataListByTypeCodeApi } from '@/api/system/dictData'
 import { useAppStore } from '@/stores/modules/app'
 
 defineOptions({
@@ -17,7 +16,6 @@ const appStore = useAppStore()
 const queryFormRef = ref()
 const { forEach } = useCutTree({ id: 'id', parentId: 'parentId', children: 'children' })
 const state = reactive({
-  commonStatusList: [],
   currentRow: {},
   showDrawer: false,
   queryLoading: false,
@@ -72,14 +70,9 @@ const methods = {
     state.showDrawer = false
     methods.queryData()
   },
-  async getCommonStatusDict() {
-    const { ok, data } = await getDictDataListByTypeCodeApi('commonStatus')
-    if (ok)
-      state.commonStatusList = data
-  },
+
 }
 onMounted(() => {
-  methods.getCommonStatusDict()
   methods.queryData()
 })
 </script>
@@ -153,9 +146,7 @@ onMounted(() => {
 
           <el-table-column label="状态" width="90" align="center" header-align="center">
             <template #default="{ row }">
-              <el-tag :type="state.commonStatusList.find(item => item.value === row.status)?.eleType">
-                {{ state.commonStatusList.find(item => item.value === row.status)?.label }}
-              </el-tag>
+              <DictTag v-model="row.status" type-code="commonStatus" />
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center" />
