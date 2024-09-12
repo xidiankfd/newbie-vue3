@@ -101,9 +101,9 @@ onMounted(() => {
             <el-input v-model="state.form.roleCode" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <DictSelect v-model="state.form.status" type-code="commonStatus" style="width: 100px;" clearable :auto-def="false"/>
+            <DictSelect v-model="state.form.status" type-code="commonStatus" style="width: 100px;" clearable :auto-def="false" />
           </el-form-item>
-          <el-form-item> 
+          <el-form-item>
             <el-button type="primary" :icon="Search" :loading="state.queryLoading" @click="methods.queryData">
               查询
             </el-button>
@@ -127,7 +127,7 @@ onMounted(() => {
             <el-button :icon="Refresh" circle @click="methods.queryData" />
           </div>
         </div>
-        <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 350px)">
+        <el-table ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe height="calc(100vh - 370px)">
           <el-table-column type="selection" width="50" align="center" fixed="left" />
           <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="65px">
             <template #default="{ $index }">
@@ -192,7 +192,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.el-form-item {
-  margin-bottom: 0;
-}
+
 </style>

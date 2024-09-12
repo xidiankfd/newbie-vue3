@@ -5,7 +5,7 @@ import useAuth from '@/hooks/useAuth'
 import { download, downloadBlobFile, getFileDownloadUrl, remove, upload } from '@/api/file'
 
 const { tokenInfo } = useAuth()
-const filePath = 'public/2024/04/30/wallhaven-7pmkj30394.png'
+const filePath = 'public/2024/09/12/wallhaven-7pmkj32730.png'
 const fileList = ref([])
 
 async function handleRemove(file, uploadFiles) {
@@ -47,7 +47,9 @@ async function preview1() {
   previewBlob.value = URL
 }
 async function handleChange(e) {
-  await upload(e.target.files)
+  await upload(e.target.files).then((res) => {
+    console.log(res)
+  })
 }
 </script>
 

@@ -137,7 +137,7 @@ onMounted(() => {
         </div>
         <el-table
           ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="id"
-          height="calc(100vh - 300px)"
+          height="calc(100vh - 320px)"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column
@@ -160,7 +160,7 @@ onMounted(() => {
           <el-table-column prop="sort" label="排序" width="70" align="right" header-align="center" />
           <el-table-column label="状态" width="90" align="center" header-align="center">
             <template #default="{ row }">
-              <DictTag v-model="row.status" type-code="commonStatus"/>
+              <DictTag v-model="row.status" type-code="commonStatus" />
             </template>
           </el-table-column>
           <el-table-column
@@ -204,7 +204,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.el-form-item {
-  margin-bottom: 0;
-}
+
 </style>

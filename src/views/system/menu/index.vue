@@ -121,7 +121,7 @@ onMounted(() => {
         </div>
         <el-table
           ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="id"
-          height="calc(100vh - 300px)"
+          height="calc(100vh - 320px)"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column prop="title" label="标题" width="180" fixed="left" align="left" header-align="center" />
@@ -187,9 +187,5 @@ onMounted(() => {
 <style scoped>
 :deep(.el-drawer__body) {
   padding: 0;
-}
-
-.el-form-item {
-  margin-bottom: 0;
 }
 </style>

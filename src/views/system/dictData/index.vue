@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Minus, Plus, Refresh, Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import DictDataForm from './DictDataForm.vue'
@@ -84,7 +84,6 @@ const methods = {
     ok && methods.queryData()
   },
 }
-
 </script>
 
 <template>
@@ -101,7 +100,7 @@ const methods = {
                 <el-input v-model="state.form.label" placeholder="请输入" clearable @keyup.enter="methods.queryData" />
               </el-form-item>
               <el-form-item label="状态" prop="status">
-                <DictSelect v-model="state.form.status" type-code="commonStatus" style="width: 100px;" :auto-def="false"/>
+                <DictSelect v-model="state.form.status" type-code="commonStatus" style="width: 100px;" :auto-def="false" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" :icon="Search" :loading="state.queryLoading" @click="methods.queryData">
@@ -132,7 +131,7 @@ const methods = {
             </div>
             <el-table
               ref="tableRef" v-loading="state.queryLoading" :data="state.tableData" border stripe
-              height="calc(100vh - 350px)"
+              height="calc(100vh - 370px)"
             >
               <el-table-column type="selection" width="55" />
               <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="65px">
@@ -152,7 +151,7 @@ const methods = {
 
               <el-table-column label="元素类型" align="center" header-align="center" width="120px">
                 <template #default="{ row }">
-                  <DictTag v-model="row.eleType" type-code="eleType"/>
+                  <DictTag v-model="row.eleType" type-code="eleType" />
                 </template>
               </el-table-column>
               <el-table-column label="元素样式" align="center" header-align="center" width="100px">
@@ -164,7 +163,7 @@ const methods = {
               </el-table-column>
               <el-table-column label="状态" align="center" header-align="center" width="100px">
                 <template #default="{ row }">
-                  <DictTag v-model="row.status" type-code="commonStatus"/>
+                  <DictTag v-model="row.status" type-code="commonStatus" />
                 </template>
               </el-table-column>
               <el-table-column prop="remark" label="备注" header-align="center" min-width="200px" />
@@ -209,17 +208,13 @@ const methods = {
     </el-main>
     <DictDataForm
       v-if="state.dialogShow" v-model="state.dialogShow" :row="state.currentRow"
-       :current-dict-type="state.currentDictType"
+      :current-dict-type="state.currentDictType"
       @on-save-success="methods.saveSuccess"
     />
   </el-container>
 </template>
 
 <style scoped>
-.el-form-item {
-  margin-bottom: 0;
-}
-
 .status-box {
   width: 20px;
   height: 20px;

@@ -95,7 +95,7 @@ const methods = {
     state.showDialog = false
     methods.queryData()
   },
-  
+
 }
 onMounted(() => {
   methods.initDeptTree()
@@ -157,7 +157,7 @@ onMounted(() => {
           <el-table
             ref="tableRef"
             v-loading="state.queryLoading" :data="state.tableData" border stripe row-key="menuId"
-            height="calc(100vh - 343px)"
+            height="calc(100vh - 363px)"
           >
             <el-table-column type="selection" width="50" align="center" fixed="left" />
             <el-table-column label="序号" fixed="left" type="index" align="right" header-align="center" width="65px">
@@ -188,12 +188,12 @@ onMounted(() => {
             <el-table-column prop="email" label="邮箱" header-align="center" min-width="160px" show-overflow-tooltip />
             <el-table-column prop="gender" label="性别" align="center" width="100px">
               <template #default="{ row }">
-                <DictTag v-model="row.gender" type-code="userGender"/>
+                <DictTag v-model="row.gender" type-code="userGender" />
               </template>
             </el-table-column>
             <el-table-column prop="status" label="状态" align="center" width="100px">
               <template #default="{ row }">
-                <DictTag v-model="row.status" type-code="userStatus"/>
+                <DictTag v-model="row.status" type-code="userStatus" />
               </template>
             </el-table-column>
             <el-table-column prop="sort" label="排序" align="right" header-align="center" width="80px" />
@@ -240,9 +240,5 @@ onMounted(() => {
 .avatar {
   width: 80px;
   height: 80px;
-}
-
-.el-form-item {
-  margin-bottom: 0;
 }
 </style>
