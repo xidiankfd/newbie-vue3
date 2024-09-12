@@ -81,14 +81,14 @@ onMounted(() => {
       </el-table-column>
       <el-table-column v-hasPerm="'sys.dict.type.update'" label="操作" fixed="right" width="60">
         <template #default="{ row }">
-          <el-button v-if="row.edit" type="primary" size="default" link @click="methods.onUpdateDictTypeName(row)">
+          <el-button v-if="row.edit" type="primary" size="default" link @click.stop="methods.onUpdateDictTypeName(row)">
             <template #icon>
               <el-icon>
                 <SvgIcon name="AntDesignCheckOutlined" />
               </el-icon>
             </template>
           </el-button>
-          <el-button v-else type="primary" size="default" link @click="row.edit = true">
+          <el-button v-else type="primary" size="default" link @click.stop="row.edit = true">
             <template #icon>
               <el-icon>
                 <SvgIcon name="AntDesignEditOutlined" />
