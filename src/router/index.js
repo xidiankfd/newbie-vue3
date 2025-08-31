@@ -9,7 +9,7 @@ import usePageLoading from '@/utils/pageLoading'
 import { userInfoApi } from '@/api/security'
 
 // 路由白名单
-export const WHITE_LIST = []
+export const WHITE_LIST = ['/login']
 
 const router = createRouter({
   // 使用HTML5模式，正式环境服务器配置查看：https://router.vuejs.org/zh/guide/essentials/history-mode.html
@@ -23,7 +23,7 @@ router.beforeEach(async (to, from) => {
   const { hasTokenInfo } = useAuth()
   if (hasTokenInfo && to.name === 'Login') {
     /** 如果已经登录并跳转登录页，则重定向 */
-    return { path: from.fullPath }
+    return { path: from.fullPath || '/' }
   }
   if (WHITE_LIST.includes(to.fullPath)) {
     /** 如果为白名单路由，则通过 */
@@ -34,20 +34,18 @@ router.beforeEach(async (to, from) => {
     return { name: 'Login' }
   }
   const userStore = useUserStore()
-  /** 如果已经认证但仓库没有用户信息，尝试重新获取用户信息 */
+  /** 如果已经认证但仓库没有用户信息，尝试重新获取用户信息并初始化路由 */
   if (hasTokenInfo && !userStore.userInfo) {
-    const routeStore = useRouteStore()
     const { ok, data } = await userInfoApi()
     if (ok) {
       // 将用户信息保存到仓库
       userStore.userInfo = data
       // 初始化路由
+      const routeStore = useRouteStore()
       await routeStore.initRoutes()
       return { path: to.fullPath, replace: true }
     }
-    else {
-      // return { name: 'Login' }
-    }
+    return { name: 'Login' }
   }
 })
 
