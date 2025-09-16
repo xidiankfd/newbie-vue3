@@ -313,28 +313,84 @@ src/
 ## 后端项目架构 (newbie-boot3)
 
 ### 🏗️ 技术架构
-- **框架**: Spring Boot 3.2.4 + JDK 21
-- **数据库**: 支持 MySQL、PostgreSQL、Oracle 多数据源
-- **缓存**: Redis (Lettuce连接池)
-- **认证鉴权**: Sa-Token 1.37.0
-- **ORM**: MyBatis Plus
-- **工具库**: Hutool 5.8.26
-- **文件存储**: 本地存储 + MinIO 8.4.3
-- **API文档**: SpringDoc OpenAPI 3
-- **构建工具**: Maven
+
+#### 核心框架版本
+| 技术栈 | 版本 | 用途说明 |
+|--------|------|----------|
+| **Spring Boot** | 3.2.4 | 基础框架 |
+| **Java** | 21 | 运行环境 |
+| **Sa-Token** | 1.37.0 | 认证鉴权 |
+| **MyBatis-Plus** | 3.5.5 | ORM数据访问 |
+| **Hutool** | 5.8.26 | 工具库 |
+| **MinIO** | 8.4.3 | 对象存储 |
+| **Knife4j** | 4.4.0 | API文档 |
+| **FreeMarker** | 2.3.32 | 模板引擎 |
+| **OSHI** | 6.4.1 | 系统监控 |
+
+#### 数据库和缓存
+- **PostgreSQL** (主要)：localhost:5432/postgres
+- **MySQL** (支持)：localhost:3306/newbie3
+- **Oracle** (支持)：ojdbc6 11.2.0.4
+- **Redis**: Lettuce连接池，超时10秒
 
 ### 📁 模块结构
 ```
-newbie-boot3/
-├── newbie-admin/           # 后台管理接口入口模块
-├── newbie-common/          # 公共工具和基础配置
-├── newbie-security/        # 认证鉴权模块
-├── newbie-system/          # 系统管理模块
-├── newbie-file/           # 文件服务模块
-├── newbie-standard/       # 标准资源管理模块
-├── newbie-weblog/         # Web日志记录模块
-└── newbie-generator/      # 代码生成器模块
+newbie-boot3/ (父项目)
+├── newbie-admin/           # 🚀 主应用模块 (端口: 8090)
+├── newbie-common/          # 📦 基础通用模块
+├── newbie-security/        # 🔐 认证鉴权模块
+├── newbie-system/          # 👥 系统管理模块
+├── newbie-standard/        # ⭐ 标准资源管理模块 (核心业务)
+├── newbie-file/           # 📁 文件服务模块
+├── newbie-weblog/         # 📊 Web日志服务模块
+├── newbie-generator/      # ⚙️ 代码生成器模块
+├── db/                    # 🗄️ 数据库脚本目录
+├── bin/                   # 🔧 部署运维脚本
+└── 开发文档/              # 📚 项目开发文档
 ```
+
+### 🎯 核心业务特色
+
+#### ⭐ 标准资源管理系统 (核心业务)
+**完整的标准资源生态系统**，包含5个核心实体模型：
+
+**数据模型架构**：
+```
+StdResource (标准资源主表) - 28个字段，支持GB/T、WS/T、DB等标准类型
+├── StdResourceAttachment (附件表) - 支持PDF、DOCX等多格式文件
+├── StdResourceReference (引用关系表) - 标准间替代/引用关系
+├── StdInterpretation (解读表) - 官方/专家解读管理
+└── StdTerminology (术语表) - 术语定义和分类管理
+```
+
+**核心特性**：
+- **多标准支持**: GB/T(国标)、WS/T(卫标)、DB(地标)、T/(团标)
+- **全生命周期**: 发布→实施→废止的完整状态管理
+- **智能检索**: 多维度查询和关键词搜索
+- **关联管理**: 标准间引用替代关系维护
+- **附件系统**: 支持PDF、DOCX等多格式文件管理
+
+#### 🏗️ 架构亮点
+- **模块化设计**: 8个功能模块清晰分工，高内聚低耦合
+- **企业级安全**: 多层权限控制 + 白名单机制 + Redis分布式会话
+- **高性能设计**: HikariCP连接池 + Redis缓存 + MyBatis二级缓存
+- **开发友好**: Knife4j文档 + 代码生成器 + 统一响应格式
+
+### 🗄️ 数据库架构
+
+#### 数据库脚本组织
+```
+db/
+├── mysql.sql               # MySQL 数据库完整脚本
+├── oracle.sql              # Oracle 数据库完整脚本
+├── pgsql.sql               # PostgreSQL 数据库完整脚本
+└── std_resource_pgsql.sql  # 标准资源模块专用脚本 (v1.1)
+```
+
+#### 核心数据表结构
+- **系统管理表 (8个)**: sys_user, sys_role, sys_dept, sys_menu, sys_role_menu, sys_user_role, sys_dict_type, sys_dict_data
+- **标准资源表 (5个)**: std_resource, std_resource_attachment, std_resource_reference, std_interpretation, std_terminology
+- **监控日志表 (2个)**: sys_log_login, sys_log_operate
 
 ### 🔌 API接口架构
 
@@ -406,41 +462,81 @@ newbie-boot3/
 - `GET /monitor/logOperate/paging` - 分页查询操作日志
 - `DELETE /monitor/logOperate/deleteBatch` - 批量删除操作日志
 
-#### 📋 标准资源管理接口 (/standard)
+#### 📋 标准资源管理接口 (/standard) ⭐
 
 ##### 标准资源核心 (/standard/resource)
-**StdResourceController** - 标准资源主体管理
-- `GET /standard/resource/page` - 分页查询标准资源列表
+**StdResourceController** - 标准资源主体管理 (20+ REST接口)
+- `GET /standard/resource/page` - 分页查询标准资源列表 (支持多维度筛选)
 - `GET /standard/resource/{id}` - 获取标准资源详情
+- `GET /standard/resource/code/{code}` - 按编号精确查询
+- `GET /standard/resource/status/{status}` - 按状态查询 (现行/废止/即将实施)
+- `GET /standard/resource/field/{field}` - 按领域查询
 - `POST /standard/resource` - 新增标准资源
 - `PUT /standard/resource` - 更新标准资源
 - `DELETE /standard/resource/{ids}` - 批量删除标准资源
+- `POST /standard/resource/batch` - 批量导入标准资源
+
+**关键查询参数**：
+- **标准类型**: GB/T(国标)、WS/T(卫标)、DB(地标)、T/(团标)等
+- **标准状态**: 现行、废止、即将实施
+- **标准分类**: 按业务领域分类查询
+- **关键词搜索**: 标准名称、编号模糊查询
 
 ##### 标准资源附件 (/standard/attachment)
 **StdResourceAttachmentController** - 标准资源附件管理
 - `GET /standard/attachment/page` - 分页查询附件列表
-- `POST /standard/attachment` - 新增附件
-- `DELETE /standard/attachment/{ids}` - 删除附件
+- `GET /standard/attachment/resource/{resourceId}` - 获取指定资源的所有附件
+- `POST /standard/attachment` - 新增附件 (支持PDF、DOCX、XLS等格式)
+- `PUT /standard/attachment` - 更新附件信息
+- `DELETE /standard/attachment/{ids}` - 批量删除附件
+- `GET /standard/attachment/download/{id}` - 附件下载
 
-##### 标准资源参考 (/standard/reference)
-**StdResourceReferenceController** - 标准资源引用关系
+**附件类型支持**：
+- **主附件**: 标准正文文档
+- **辅助附件**: 说明文档、解读材料等
+- **文件格式**: PDF、DOCX、XLS、PPT等多格式支持
+
+##### 标准资源引用关系 (/standard/reference)
+**StdResourceReferenceController** - 标准间关联关系管理
 - `GET /standard/reference/page` - 分页查询引用关系
+- `GET /standard/reference/source/{resourceId}` - 获取源标准的引用关系
+- `GET /standard/reference/target/{resourceId}` - 获取目标标准的被引用关系
 - `POST /standard/reference` - 新增引用关系
+- `PUT /standard/reference` - 更新引用关系
 - `DELETE /standard/reference/{ids}` - 删除引用关系
 
-##### 标准术语 (/standard/terminology)
-**StdTerminologyController** - 标准术语管理
+**关系类型**：
+- **替代关系**: 新标准替代旧标准
+- **引用关系**: 标准间的引用依赖
+- **参考关系**: 相关标准参考
+
+##### 标准术语管理 (/standard/terminology)
+**StdTerminologyController** - 标准术语定义管理
 - `GET /standard/terminology/page` - 分页查询术语列表
+- `GET /standard/terminology/category/{category}` - 按分类查询术语
+- `GET /standard/terminology/search` - 术语搜索 (支持拼音、关键词)
 - `POST /standard/terminology` - 新增术语
 - `PUT /standard/terminology` - 更新术语
-- `DELETE /standard/terminology/{ids}` - 删除术语
+- `DELETE /standard/terminology/{ids}` - 批量删除术语
 
-##### 标准解释 (/standard/interpretation)
-**StdInterpretationController** - 标准解释说明管理
-- `GET /standard/interpretation/page` - 分页查询解释列表
-- `POST /standard/interpretation` - 新增解释
-- `PUT /standard/interpretation` - 更新解释
-- `DELETE /standard/interpretation/{ids}` - 删除解释
+**术语特性**：
+- **分类管理**: 按业务领域分类
+- **多语言支持**: 中英文术语对照
+- **关联标准**: 术语与标准的关联关系
+
+##### 标准解读说明 (/standard/interpretation)
+**StdInterpretationController** - 标准解读和说明管理
+- `GET /standard/interpretation/page` - 分页查询解读列表
+- `GET /standard/interpretation/resource/{resourceId}` - 获取指定标准的解读
+- `GET /standard/interpretation/official` - 获取官方解读
+- `POST /standard/interpretation` - 新增解读
+- `PUT /standard/interpretation` - 更新解读
+- `DELETE /standard/interpretation/{ids}` - 删除解读
+
+**解读类型**：
+- **官方解读**: 标准制定机构发布的解读
+- **专家解读**: 行业专家的解读说明
+- **实施指南**: 标准实施的指导文档
 
 #### 📁 文件服务接口 (/file)
 **FileController** - 文件上传下载管理
@@ -450,31 +546,119 @@ newbie-boot3/
 
 ### ⚙️ 核心配置
 
+#### 服务配置
+- **应用端口**: 8090 (从8080调整)
+- **项目路径**: /newbie3
+- **API文档**: http://localhost:8090/newbie3/doc.html (Knife4j)
+
 #### 认证鉴权配置 (Sa-Token)
 - **Token有效期**: 1800秒 (30分钟)
-- **白名单路径**: 登录、验证码、公共文件、标准资源接口等
+- **白名单路径**: `/security/login, /security/initAdmin, /security/imageCaptcha, /public/**, /file/download, /standard/**`
 - **权限注解**: `@SaCheckPermission` 进行方法级权限控制
+- **分布式会话**: Redis存储Token，支持集群部署
 
-#### 数据库配置
-- **支持多数据源**: MySQL、PostgreSQL、Oracle
-- **默认数据源**: PostgreSQL (localhost:5432/postgres)
-- **ORM**: MyBatis Plus (关闭banner)
+#### 数据库配置 (多数据源支持)
+
+##### PostgreSQL (主要)
+```yaml
+spring.datasource:
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/postgres
+  username: postgres
+  password: postgres
+```
+
+##### MySQL (支持)
+```yaml
+spring.datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/newbie3
+  username: root
+  password: root
+```
+
+##### Oracle (支持)
+```yaml
+spring.datasource:
+  driver-class-name: oracle.jdbc.OracleDriver
+  url: jdbc:oracle:thin:@localhost:1521:xe
+```
 
 #### 缓存配置 (Redis)
-- **连接**: localhost:6379
-- **连接池**: Lettuce (最大连接200，最大空闲10)
-- **超时时间**: 10秒
+```yaml
+spring.data.redis:
+  host: localhost
+  port: 6379
+  timeout: 10s
+  lettuce.pool:
+    max-active: 200 # 最大连接数
+    max-wait: -1ms # 最大等待时间
+    max-idle: 10 # 最大空闲连接
+    min-idle: 1 # 最小空闲连接
+```
 
 #### 文件服务配置
-- **存储方案**: 支持本地存储和MinIO
-- **本地存储路径**: D:/project/upload
-- **文件访问前缀**: /public
-- **上传限制**: 最大文件200MB
+```yaml
+newbie.file:
+  scheme: minio # 存储方案: default(本地) 或 minio
+  prefix: public # 访问前缀
+  file-location: D:/project/upload # 本地存储路径
+  minio:
+    end-point: http://localhost:9000
+    access-key: minioadmin
+    secret-key: minioadmin
+    bucket: files
+```
 
-#### 日志配置
-- **Web日志**: 可配置记录所有接口或仅错误日志
-- **策略**: all_api (记录所有接口) 或 default (仅记录注解接口)
-- **日志级别**: 支持DEBUG级别调试输出
+**文件上传限制**:
+- **最大文件大小**: 200MB
+- **支持格式**: PDF、DOCX、XLS、PPT、图片等
+- **访问方式**: `/public/**` 路径公开访问
+
+#### Web日志配置
+```yaml
+newbie.weblog:
+  strategy: all_api # 记录策略: all_api(所有接口) 或 default(注解接口)
+  enable-save-error-log: true # 启用错误日志保存
+```
+
+#### MyBatis-Plus配置
+```yaml
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 关闭SQL日志
+  global-config:
+    banner: false # 关闭启动banner
+    db-config:
+      logic-delete-field: deleted # 逻辑删除字段
+      logic-delete-value: 1 # 删除值
+      logic-not-delete-value: 0 # 未删除值
+```
+
+### 🚀 部署和运维
+
+#### 环境配置文件
+```
+application.yml         # 主配置: 端口8090、Jackson配置、文件上传限制
+application-dev.yml     # 开发环境: PostgreSQL + Redis + MinIO
+application-prod.yml    # 生产环境: MySQL + 本地存储 + 关闭API文档
+application-apidoc.yml  # API文档配置: Knife4j启用
+```
+
+#### 数据库初始化
+1. **选择数据库**: MySQL/PostgreSQL/Oracle任选其一
+2. **执行脚本**: 运行对应的 `db/[database].sql` 文件
+3. **标准资源**: 额外执行 `db/std_resource_pgsql.sql` (如使用PostgreSQL)
+
+#### 部署脚本
+```
+bin/
+├── start.sh           # Linux启动脚本
+├── stop.sh            # Linux停止脚本
+├── restart.sh         # Linux重启脚本
+├── start.bat          # Windows启动脚本
+└── stop.bat           # Windows停止脚本
+```
 
 ### 🔄 前后端接口对接规范
 
@@ -488,17 +672,81 @@ newbie-boot3/
 }
 ```
 
-#### 分页参数格式
-- `current`: 当前页码
-- `size`: 每页大小
-- 返回: `{records: [], total: 0, current: 1, size: 10}`
+**状态码说明**:
+- `200`: 操作成功
+- `400`: 请求参数错误
+- `401`: 未认证
+- `403`: 权限不足
+- `500`: 服务器内部错误
 
-#### 权限验证
-- 前端路由守卫检查token
-- 后端使用 `@SaCheckPermission` 注解验证接口权限
-- 白名单路径无需token验证
+#### 分页参数格式
+**请求参数**:
+- `current`: 当前页码 (从1开始)
+- `size`: 每页大小 (默认10)
+
+**响应格式**:
+```json
+{
+  "code": 200,
+  "data": {
+    "records": [...],      // 数据列表
+    "total": 100,         // 总记录数
+    "current": 1,         // 当前页
+    "size": 10,           // 每页大小
+    "pages": 10           // 总页数
+  }
+}
+```
+
+#### 权限验证机制
+1. **前端路由守卫**: 检查token有效性和路由权限
+2. **后端接口权限**: 使用 `@SaCheckPermission` 注解验证
+3. **白名单机制**: 无需token验证的公开接口
+4. **动态权限**: 基于用户角色动态分配菜单和操作权限
+
+#### 标准资源接口特殊说明
+
+##### 查询接口增强
+**多维度查询支持**:
+```json
+{
+  "resourceCode": "GB/T", // 标准编号模糊查询
+  "resourceName": "质量", // 标准名称模糊查询
+  "standardStatus": "现行", // 标准状态
+  "standardField": "医疗", // 标准领域
+  "standardType": "GB/T", // 标准类型
+  "publishOrg": "国标委" // 发布机构
+}
+```
+
+##### 附件上传接口
+**支持的文件类型**:
+- **文档类**: PDF、DOC、DOCX、XLS、XLSX、PPT、PPTX
+- **图片类**: JPG、PNG、GIF、BMP
+- **压缩包**: ZIP、RAR、7Z
+
+**上传响应**:
+```json
+{
+  "code": 200,
+  "data": {
+    "fileId": "123456",
+    "fileName": "标准文档.pdf",
+    "fileSize": 2048576,
+    "downloadUrl": "/file/download/123456"
+  }
+}
+```
 
 #### 错误处理
-- 全局异常处理器统一返回错误格式
-- 前端axios拦截器统一处理错误响应
-- 支持DEBUG级别日志输出调试信息
+- **全局异常处理**: `GlobalExceptionHandle` 统一处理所有异常
+- **前端拦截器**: Axios统一处理HTTP错误和业务错误
+- **调试模式**: 开发环境可启用DEBUG级别查看详细错误信息
+
+#### 最新变更记录 (2024年9月)
+1. **端口变更**: 后端服务端口从8080调整为8090
+2. **API文档地址**: http://localhost:8090/newbie3/doc.html
+3. **标准资源模块**: 新增完整的5表数据模型和20+接口
+4. **文件服务增强**: 支持200MB大文件上传，集成MinIO对象存储
+5. **权限白名单更新**: 标准资源相关接口加入白名单 (`/standard/**`)
+6. **数据库脚本**: 新增PostgreSQL专用标准资源脚本

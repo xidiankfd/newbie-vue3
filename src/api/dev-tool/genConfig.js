@@ -19,14 +19,14 @@ export function listApi(params) {
 /**
 * 新增数据
 */
-export function addDataApi(data){
+export function addDataApi(data) {
   return axios.post(`${BASE_URL}/addData`, data, { successMsgType: msgType.msg })
 }
 
 /**
 * 根据主键更新数据
 */
-export function updateByPkValApi(data){
+export function updateByPkValApi(data) {
   return axios.post(`${BASE_URL}/updateByPkVal`, data, { successMsgType: msgType.msg })
 }
 

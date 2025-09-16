@@ -21,7 +21,7 @@ export const standardResourceApi = {
     return request({
       url: `${baseURL}/list`,
       method: 'get',
-      params
+      params,
     })
   },
 
@@ -33,7 +33,7 @@ export const standardResourceApi = {
   getStandardDetail: (id) => {
     return request({
       url: `${baseURL}/detail/${id}`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -45,7 +45,7 @@ export const standardResourceApi = {
   getDigitalContent: (id) => {
     return request({
       url: `${baseURL}/digitalContent/${id}`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -57,7 +57,7 @@ export const standardResourceApi = {
   getApplicationSupport: (id) => {
     return request({
       url: `${baseURL}/applicationSupport/${id}`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -76,7 +76,7 @@ export const standardResourceApi = {
     return request({
       url: `${baseURL}/search`,
       method: 'get',
-      params
+      params,
     })
   },
 
@@ -87,7 +87,7 @@ export const standardResourceApi = {
   getStandardCategories: () => {
     return request({
       url: `${baseURL}/categories`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -98,7 +98,7 @@ export const standardResourceApi = {
   getStandardDomains: () => {
     return request({
       url: `${baseURL}/domains`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -109,7 +109,7 @@ export const standardResourceApi = {
   getStandardStatuses: () => {
     return request({
       url: `${baseURL}/statuses`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -120,7 +120,7 @@ export const standardResourceApi = {
   getStandardNatures: () => {
     return request({
       url: `${baseURL}/natures`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -131,7 +131,7 @@ export const standardResourceApi = {
   getPublishingOrganizations: () => {
     return request({
       url: `${baseURL}/organizations`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -144,7 +144,7 @@ export const standardResourceApi = {
     return request({
       url: `${baseURL}/download/${id}`,
       method: 'get',
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
 
@@ -156,7 +156,7 @@ export const standardResourceApi = {
   getApiList: (id) => {
     return request({
       url: `${baseURL}/apis/${id}`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -168,7 +168,7 @@ export const standardResourceApi = {
   getSdkList: (id) => {
     return request({
       url: `${baseURL}/sdks/${id}`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -182,7 +182,7 @@ export const standardResourceApi = {
     return request({
       url: `${baseURL}/examples/${id}`,
       method: 'get',
-      params: { language }
+      params: { language },
     })
   },
 
@@ -194,7 +194,7 @@ export const standardResourceApi = {
   getFaqs: (id) => {
     return request({
       url: `${baseURL}/faqs/${id}`,
-      method: 'get'
+      method: 'get',
     })
   },
 
@@ -206,9 +206,9 @@ export const standardResourceApi = {
   getApplicationScenarios: (id) => {
     return request({
       url: `${baseURL}/scenarios/${id}`,
-      method: 'get'
+      method: 'get',
     })
-  }
+  },
 }
 
 export default standardResourceApi

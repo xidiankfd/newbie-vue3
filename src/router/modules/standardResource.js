@@ -1,4 +1,3 @@
-
 // 标准资源管理路由配置
 const standardResourceRouter = {
   path: '/standardResource',
@@ -10,7 +9,7 @@ const standardResourceRouter = {
     order: 4, // 调整order值，使其在菜单管理界面中排序更靠前
     sortNo: 4, // 调整排序值，使其在菜单中显示更靠前
     roles: ['admin', 'standard_manager'], // 配置可访问的角色
-    permission: 'standard.resource' // 添加权限标识
+    permission: 'standard.resource', // 添加权限标识
   },
   children: [
     {
@@ -21,8 +20,8 @@ const standardResourceRouter = {
         title: '标准资源列表',
         icon: 'FileText',
         affix: true,
-        permission: 'standard.resource.list' // 添加子菜单权限标识
-      }
+        permission: 'standard.resource.list', // 添加子菜单权限标识
+      },
     },
     {
       path: 'detail/:id',
@@ -32,9 +31,9 @@ const standardResourceRouter = {
         title: '标准资源详情',
         icon: 'FileText',
         hidden: true,
-        permission: 'standard.resource.detail' // 添加子菜单权限标识
+        permission: 'standard.resource.detail', // 添加子菜单权限标识
       },
-      props: true
+      props: true,
     },
     {
       path: 'digitalContent',
@@ -44,11 +43,11 @@ const standardResourceRouter = {
         title: '数字化内容',
         icon: 'Database',
         hidden: true,
-        permission: 'standard.resource.digital' // 添加子菜单权限标识
+        permission: 'standard.resource.digital', // 添加子菜单权限标识
       },
-      props: (route) => ({
-        id: route.query.id
-      })
+      props: route => ({
+        id: route.query.id,
+      }),
     },
     {
       path: 'applicationSupport',
@@ -57,13 +56,13 @@ const standardResourceRouter = {
       meta: {
         title: '应用支持',
         icon: 'Code',
-        hidden: true
+        hidden: true,
       },
-      props: (route) => ({
-        id: route.query.id
-      })
-    }
-  ]
+      props: route => ({
+        id: route.query.id,
+      }),
+    },
+  ],
 }
 
 export default standardResourceRouter

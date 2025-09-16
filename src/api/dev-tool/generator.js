@@ -1,4 +1,4 @@
-import axios, { msgType } from '@/utils/axios'
+import axios from '@/utils/axios'
 
 const BASE_URL = '/generator'
 
@@ -11,6 +11,6 @@ export function listApi(params) {
   return axios.get(`${BASE_URL}/dbTableList`, { params })
 }
 
-export function generateApi(data){
-    return axios.post(`${BASE_URL}/generate`, data,{responseType: 'blob',})
+export function generateApi(data) {
+  return axios.post(`${BASE_URL}/generate`, data, { responseType: 'blob' })
 }

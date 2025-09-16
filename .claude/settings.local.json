@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/workspace/idea/newbie-boot3/newbie-admin/**)",
+      "Read(//d/workspace/idea/newbie-boot3/**)",
+      "Bash(npm run build:*)",
+      "Read(//c/Users/kfd/Pictures/项目/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
